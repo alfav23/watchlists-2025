@@ -63,7 +63,7 @@ const LogIn = () => {
 
             <div className={styles.options}>
                     <Link href="/resetPassword">Forgot password? </Link>
-                    <p>Don't have an account? <Link href="/signup">&nbsp;Sign up</Link></p>
+                    <p>Don't have an account? <Link href="/signup">Sign up</Link></p>
             </div>
             {showToast && (
                 <Toast

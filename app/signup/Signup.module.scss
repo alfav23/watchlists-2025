@@ -1,4 +1,4 @@
-.loginContainer {
+.signupContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -31,7 +31,6 @@
 }
 
 .input {
-    width: 100%;
     background-color: whitesmoke;
     padding: 5px;
     margin-bottom: 12px;
@@ -42,18 +41,7 @@
     font-family: 'PressStart2P', sans-serif;
 }
 
-.passwordContainer {
-    width: 100%;
-    position: relative;
-}
-
-.toggleVisible {
-    position: absolute;
-    right: 0px;
-    top: 3px;
-}
-
-.login {
+.submitButton {
     cursor: pointer;
     background-color: #bae1ff;
     color: black;
@@ -79,24 +67,20 @@
     }
 }
 
-.options {
-    margin-top: 20px;
+.goToLogin {
+    color: plum;
+    text-decoration: none;
     font-size: 10px;
     text-align: center;
+    margin-top: 10px;
 
-    a {
-        color: plum;
+    &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+    }
+
+    &:visited {
         text-decoration: none;
-        text-align: center;
-
-        &:hover {
-        text-decoration: underline;
-        cursor: pointer;
-        }
-
-        &:visited {
-            text-decoration: none;
-        }
     }
 }
 

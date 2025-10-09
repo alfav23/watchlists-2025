@@ -1,0 +1,60 @@
+.watchlistContent {
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+}
+
+.watchlist {
+    display: flex;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid black;
+    border-radius: 6px;
+    background-color: #ffffba;
+    padding: 12px;
+
+    a {
+        font-size: 12px;
+        color: plum;
+    }
+}
+
+.watchlistHeader {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid black;
+}
+
+.userInfo {
+    border-bottom: 1px solid black;
+    padding: 10px 0px 0px 10px;
+    img {
+        width: 50px;
+        height: 50px;
+        border-radius: 30px;
+        border: 1px solid black;
+    }
+
+    p {
+        font-size: 8px;
+    }
+}
+
+.watchlistDescription {
+    font-size: 8px;
+}
+
+.watchlistTitle {
+    font-size: 16px;
+}
+
+.itemName {
+    font-size: 12px;
+}
+
+.tags {
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    text-align: center;
+}
