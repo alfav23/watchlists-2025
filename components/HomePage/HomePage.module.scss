@@ -2,22 +2,20 @@
     display: block;
     width: 100%;
     min-height: 100vh;
-    min-width: 1200px;
     margin: 0;
     padding: 0;
 }
 
 .header {
     width: 100%;
-    min-width: 1200px;
     margin: 0;
     padding: 0;
 }
 
 .mainContent {
     display: flex;
+    gap: 25px;
     min-height: 100vh;
-    min-width: 1200px;
     width: 100%;
     margin: 0;
     padding: 0;
