@@ -8,4 +8,24 @@
     border-radius: 6px;
     border: 1px solid black;
     box-shadow: -8px 8px 0 black;
+    background-color: #bae1ff;
+
+    img {
+        border-radius: 30px;
+        border: 1px solid black;
+    }
+
+    p {
+        font-size: 10px;
+    }
+}
+
+.userInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 6px;
+    border: 1px solid black;
+    padding: 10px;
+
 }

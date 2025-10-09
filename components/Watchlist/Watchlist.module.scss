@@ -4,14 +4,43 @@
     padding-left: 20px;
 }
 
+.reactions {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: -3rem;
+    bottom: 1.5rem;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+
+    .like, .favorite {
+        font-size: 36px;
+    }
+
+    .comment {
+        font-size: 26px;
+    }
+}
+
 .watchlist {
+    position: relative;
     display: flex;
     width: 100%;
     max-width: 400px;
     border: 1px solid black;
     border-radius: 6px;
     background-color: #ffffba;
+    margin-right: 10px;
     padding: 12px;
+    border: 1px solid black;
+    box-shadow: -3px 3px 0 black;
+
+    &:hover {
+            cursor: pointer;
+            box-shadow: inset -3px 3px 0 black;
+            transform: translateY(.25rem);
+        }
 
     a {
         font-size: 12px;

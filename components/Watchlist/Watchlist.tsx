@@ -1,11 +1,54 @@
 'use client';
-
+import { useEffect, useState } from 'react';
 import styles from './Watchlist.module.scss';
 import Image from "next/image";
+import { CiStar, CiHeart } from 'react-icons/ci';
+import { TfiComment } from "react-icons/tfi";
+import { useAuth } from "@/context/AuthContext";
+import { db, storage } from '../../lib/firebaseConfig';
+import { orderBy, getDocs, query, collection } from 'firebase/firestore';
 
 export const Watchlist = () => {
+    
+    const [ watchlists, setWatchlists ] = useState<any[]>([]);
+    const [ fullName, setFullName ] = useState<string>("");
+    const [ username, setUsername ] = useState<string>("");
+    const { user } = useAuth();
+
+    // useEffect(() => {
+    //     const fetchWatchlists = async () => {
+    //         try {
+    //             const q = query(collection(db, "public-watchlists"), orderBy("createdAt", "desc"));
+    //             const querySnapshot = await getDocs(q);
+    //             const watchlistsData = querySnapshot.docs.map((doc) => {
+    //                 const data = doc.data();
+
+    //                 return {
+    //                     id: doc.id,
+    //                     ...data, 
+    //                 }
+    //             }),
+    //         };
+    //     });
+    //     setWatchlists(watchlistsData);
+    // } catch (error) {
+    //     console.error("Error fetching watchlists", error);
+    // }
+    // return (
+    //     public-watchlist.forEach(watchlist => {
+            
+    //     });
+
     return (
         <div className={styles.watchlist}>
+            <div className={styles.reactions}>
+                {/* save/favorite */}
+                <CiStar className={styles.favorite} />
+                {/* like */}
+                <CiHeart className={styles.like} />
+                {/* comment */}
+                <TfiComment className={styles.comment} />
+            </div>
             <div className={styles.watchlistHeader}>
                 <div className={styles.userInfo}>
                     <Image 
