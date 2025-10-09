@@ -1,13 +1,11 @@
-.feedContainer {
-    width: 100%;
+.profileBarContainer {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+    margin-left: 10px;
     padding: 20px;
     border-radius: 6px;
     border: 1px solid black;
     box-shadow: -8px 8px 0 black;
-}
-
-.watchlist {
-    list-style: none;
 }
