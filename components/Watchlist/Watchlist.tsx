@@ -32,6 +32,7 @@ export const Watchlist = () => {
                     <a href="./#watchlistId">see more ...</a>
                 </ul>
                 <div className={styles.tags}>
+                    Tags:
                     <a href='#anime'>#anime</a>
                     <a href="#cartoon"> #cartoon</a>
                     <a href='#seeMore'> #...</a>

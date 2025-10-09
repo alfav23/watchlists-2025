@@ -16,6 +16,12 @@
     a {
         font-size: 12px;
         color: plum;
+        text-decoration: none;
+
+        &:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
     }
 }
 
@@ -57,4 +63,7 @@
     align-items: end;
     justify-content: center;
     text-align: center;
+    font-size: 10px;
+    margin-top: 10px;
+    gap: .25rem;
 }
