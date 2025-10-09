@@ -10,9 +10,10 @@
   grid-template-rows: 20px 1fr 20px;
   align-items: center;
   justify-items: center;
-  min-height: 100svh;
-  padding: 80px;
-  gap: 64px;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  // gap: 64px;
   font-family: var(--font-geist-sans);
 }
 
@@ -30,7 +31,7 @@
 .main {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  // gap: 32px;
   grid-row-start: 2;
 }
 
@@ -162,6 +163,6 @@ a.secondary {
 
 @media (prefers-color-scheme: dark) {
   .logo {
-    filter: invert();
+    filter: invert($color: black);
   }
 }
