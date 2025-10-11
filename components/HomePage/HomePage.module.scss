@@ -1,0 +1,23 @@
+.container {
+    display: block;
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    width: 100%;
+    min-width: 1200px;
+    margin: 0;
+    padding: 0;
+}
+
+.mainContent {
+    display: flex;
+    min-height: 100vh;
+    gap: 25px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}

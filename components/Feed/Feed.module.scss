@@ -1,0 +1,13 @@
+.feedContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 6px;
+    border: 1px solid black;
+    box-shadow: -8px 8px 0 black;
+}
+
+.watchlist {
+    list-style: none;
+}
