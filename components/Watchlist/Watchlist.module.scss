@@ -1,33 +1,12 @@
-.watchlistContent {
+.watchlistContainer {
     display: flex;
-    flex-direction: column;
-    padding-left: 20px;
-}
-
-.reactions {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    left: -3rem;
-    bottom: 1.5rem;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-
-    .like, .favorite {
-        font-size: 36px;
-    }
-
-    .comment {
-        font-size: 26px;
-    }
 }
 
 .watchlist {
-    position: relative;
     display: flex;
     width: 100%;
     max-width: 400px;
+    max-height: 150px;
     border: 1px solid black;
     border-radius: 6px;
     background-color: #ffffba;
@@ -35,6 +14,7 @@
     padding: 12px;
     border: 1px solid black;
     box-shadow: -3px 3px 0 black;
+    z-index: 0;
 
     &:hover {
             cursor: pointer;
@@ -57,12 +37,20 @@
 .watchlistHeader {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     border-right: 1px solid black;
 }
 
 .userInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
     border-bottom: 1px solid black;
-    padding: 10px 0px 0px 10px;
+    padding-bottom: 5px;
+    padding-right: 5px;
+
     img {
         width: 50px;
         height: 50px;
@@ -73,14 +61,36 @@
     p {
         font-size: 8px;
     }
+
+    a {
+        text-decoration: none;
+        font-size: 8px;
+        color: black;
+
+        &:hover{
+            text-decoration: underline;
+        }
+    }
+}
+
+.watchlistContent {
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
 }
 
 .watchlistDescription {
     font-size: 8px;
+    width: 80%;
 }
 
 .watchlistTitle {
     font-size: 16px;
+}
+
+.items {
+    overflow-y: scroll;
 }
 
 .itemName {
@@ -89,10 +99,55 @@
 
 .tags {
     display: flex;
-    align-items: end;
-    justify-content: center;
-    text-align: center;
+    overflow-x: hidden;
     font-size: 10px;
     margin-top: 10px;
     gap: .25rem;
+}
+
+.reactions {
+    display: flex;
+    gap: .5rem;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 2;
+
+    .userLiked {
+        display: none;
+    }
+
+    .like, .favorite {
+        font-size: 32px;
+        z-index: inherit;
+        color: black;
+
+        &:hover{
+            cursor: pointer;
+            color: plum;
+        }
+    }
+
+    .comment {
+        font-size: 22px;
+        padding: .25rem;
+        z-index: inherit;
+        color: black;
+
+        &:hover{
+            cursor: pointer;
+            color: plum;
+        }
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .watchlist {
+        width: 80%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+  .watchlist {
+    width: 100%;
+  }
 }

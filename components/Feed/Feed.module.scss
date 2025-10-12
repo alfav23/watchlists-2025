@@ -11,3 +11,12 @@
 .watchlist {
     list-style: none;
 }
+
+@media screen and (max-width: 480px) {
+  .feedContainer {
+    width: 65%;
+    justify-content: center;
+    border: none;
+    box-shadow: none;
+  }
+}

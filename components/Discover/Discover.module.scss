@@ -1,5 +1,4 @@
 .discoverContainer {
-    
     width: 25%;
     padding: 20px;
     // margin-right: 25px;
@@ -10,4 +9,10 @@
     border-radius: 6px;
     border: 1px solid black;
     box-shadow: -8px 8px 0 black;
+}
+
+@media screen and (max-width: 480px) {
+  .discoverContainer {
+    display: none;
+  }
 }
