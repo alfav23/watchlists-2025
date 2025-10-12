@@ -8,8 +8,14 @@
     box-shadow: -8px 8px 0 black;
 }
 
+.watchlistsContainer {
+    display: flex;
+    align-items: center;
+}
+
 .watchlist {
     list-style: none;
+    margin-bottom: 20%;
 }
 
 @media screen and (max-width: 480px) {
