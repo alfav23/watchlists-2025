@@ -60,6 +60,8 @@ export default function Watchlist({
         setSaveCount(newSaveCount);
         setStarDisplay((prevStarDisplay) => !prevStarDisplay);
 
+        // ***update saved watchlists array (not yet created)
+
         try{
             const watchlistRef = doc(db, "watchlists", watchlistId);
             await updateDoc(watchlistRef, {
