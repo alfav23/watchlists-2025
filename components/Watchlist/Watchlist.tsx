@@ -24,9 +24,9 @@ interface WatchlistProps {
 }
 
 export default function Watchlist({
-    isPrivate = false,
-    username ="lil_lily",
-    watchlistId = `${username}01`,
+    isPrivate,
+    username,
+    watchlistId,
     title,
     tags,
     category,
@@ -123,12 +123,15 @@ export default function Watchlist({
                 </div>
             </div>
             <div className={styles.reactions}>
-                <CiStar className={styles.favorite} onClick={handleSave}/><span>{saves}</span>
+                <CiStar className={styles.favorite} onClick={handleSave}/>
+                <span>{saves}</span>
 
-                <CiHeart className={styles.like} onClick={handleLike}/><span>{likes}</span>
+                <CiHeart className={styles.like} onClick={handleLike}/>
                 <IoMdHeart className={styles.userLiked}/>
+                <span>{likes}</span>
 
-                <TfiComment className={styles.comment} onClick={handleComment}/><span>{comments}</span>
+                <TfiComment className={styles.comment} onClick={handleComment}/>
+                <span>{comments}</span>
             </div>
         </div>
     )
