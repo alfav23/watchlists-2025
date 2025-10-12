@@ -107,6 +107,7 @@
 
 .reactions {
     display: flex;
+    position: relative;
     gap: .5rem;
     flex-direction: column;
     justify-content: center;
@@ -114,17 +115,40 @@
     z-index: 2;
 
     .userLiked {
+        position: absolute;
+        top: 4.1rem;
+        font-size: 28px;
+        color: 	plum;
         display: none;
     }
 
-    .like, .favorite {
+    .userFavorited {
+        position: absolute;
+        top: 0.36rem;
+        font-size: 26px;
+        color: 	#ffffba;
+        display: none;
+    }
+
+    .favorite {
         font-size: 32px;
         z-index: inherit;
         color: black;
 
         &:hover{
             cursor: pointer;
-            color: plum;
+            color: #ffdfba;
+        }
+    }
+
+    .like {
+        font-size: 32px;
+        z-index: inherit;
+        color: black;
+
+        &:hover{
+            cursor: pointer;
+            color: #ffb3ba;
         }
     }
 
@@ -136,7 +160,7 @@
 
         &:hover{
             cursor: pointer;
-            color: plum;
+            color: #bae1ff;
         }
     }
 

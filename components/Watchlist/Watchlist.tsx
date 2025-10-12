@@ -8,6 +8,7 @@ import { db } from '../../lib/firebaseConfig';
 import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { IoMdHeart } from "react-icons/io";
+import { FaStar } from "react-icons/fa6";
 
 interface WatchlistProps {
     isPrivate: boolean;
@@ -37,6 +38,8 @@ export default function Watchlist({
     onDelete
 }: WatchlistProps) {
     const router = useRouter();
+    const [ heartDisplay, setHeartDisplay ] = useState(false);
+    const [ starDisplay, setStarDisplay ] = useState(false);
     const [ saveCount, setSaveCount ] = useState(saves || 0);
     const [ isSaved, setIsSaved ] = useState(false);
     const [ likeCount, setLikeCount ] = useState(likes || 0);
@@ -55,6 +58,7 @@ export default function Watchlist({
         const newSaveCount = saveCount + 1;
         setIsSaved(!isSaved);
         setSaveCount(newSaveCount);
+        setStarDisplay((prevStarDisplay) => !prevStarDisplay);
 
         try{
             const watchlistRef = doc(db, "watchlists", watchlistId);
@@ -70,6 +74,7 @@ export default function Watchlist({
         const newLikeCount = likeCount + 1;
         setIsLiked(!isLiked);
         setLikeCount(newLikeCount);
+        setHeartDisplay((prevHeartDisplay) => !prevHeartDisplay);
     }
 
     const handleComment = async () => {
@@ -124,10 +129,11 @@ export default function Watchlist({
             </div>
             <div className={styles.reactions}>
                 <CiStar className={styles.favorite} onClick={handleSave}/>
+                <FaStar style={{ display: starDisplay ? "flex" : "none" }} className={styles.userFavorited}/>
                 <span>{saves}</span>
 
                 <CiHeart className={styles.like} onClick={handleLike}/>
-                <IoMdHeart className={styles.userLiked}/>
+                <IoMdHeart style={{ display: heartDisplay ? "flex" : "none" }} className={styles.userLiked}/>
                 <span>{likes}</span>
 
                 <TfiComment className={styles.comment} onClick={handleComment}/>
