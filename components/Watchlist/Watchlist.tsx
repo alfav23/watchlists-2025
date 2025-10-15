@@ -16,7 +16,7 @@ interface WatchlistProps {
     watchlistId: string;
     title: string;
     tags: object;
-    category: string;
+    genre: string;
     username: string;
     items: object;
     item: string;
@@ -33,7 +33,7 @@ export default function Watchlist({
     watchlistId,
     title,
     tags,
-    category,
+    genre,
     items,
     item,
     saves,
@@ -50,8 +50,8 @@ export default function Watchlist({
     const [ isLiked, setIsLiked ] = useState(false);
     const [ commentCount, setCommentCount ] = useState(comments || 0);
     const image = "/public/images/cinnamoroll.png";
-    let status = "";
     
+        let status = ""
 
         if (isPrivate !== false) {
             status = "Private"
@@ -133,7 +133,7 @@ export default function Watchlist({
                             <div className={styles.watchlistHeader}>
                                 <div className={styles.userInfo}>
                                     <Image 
-                                    src={image}
+                                        src={image}
                                         // src={users.profilePic}
                                         width={50}
                                         height={50}
@@ -156,10 +156,10 @@ export default function Watchlist({
                                     )}
                                 </ul>
                                 <div className={styles.tags}>
-                                    Tags:
-                                    <a href='#anime'>#anime</a>
-                                    <a href="#cartoon"> #cartoon</a>
-                                    <a href={`/${watchlistId}`}> #...</a>
+                                    <p>Tags</p>
+                                    {Array.isArray(watchlist.tags) && watchlist.tags.map((item: any, idx: number) =>
+                                        <a key={idx}>#{item}</a>
+                                    )}
                                 </div>
                             </div>
                         </div>

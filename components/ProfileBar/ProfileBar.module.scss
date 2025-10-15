@@ -8,6 +8,7 @@
     border: 1px solid black;
     box-shadow: -8px 8px 0 black;
     background-color: #bae1ff;
+    max-height: 100vh;
 
     img {
         border-radius: 30px;
@@ -27,9 +28,21 @@
     border-radius: 6px;
     border: 1px solid black;
     padding: 10px;
-
 }
 
+.userOptions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 10px;
+    margin-top: 10px;
+    
+
+    a {
+        text-decoration: none;
+        color: plum
+    }
+}
 @media screen and (max-width: 480px) {
   .profileBarContainer {
     display: none;

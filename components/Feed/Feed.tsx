@@ -17,10 +17,10 @@ export const Feed = () => {
                         <Watchlist
                             watchlist={[]}
                             isPrivate={false}
-                            watchlistId="lil_lily-01"
-                            title="Lily's Anime Recs"
+                            watchlistId="watchlist-id"
+                            title="title"
                             tags={["anime", "cartoon", "romance", "drama", "action", "adventure"]}
-                            username='lil_lily'
+                            username='username'
                             items={["Spirited Away", "Howl's Moving Castle", "Graveyard of Fireflies", "Naruto"]}
                             item=""
                             category='Anime'
