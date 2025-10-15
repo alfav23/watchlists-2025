@@ -91,10 +91,14 @@
 
 .items {
     overflow-y: scroll;
+
+    li {
+        font-size: 12px;
+    }
 }
 
 .itemName {
-    font-size: 12px;
+    font-size: 10px;
 }
 
 .tags {

@@ -15,69 +15,20 @@ export const Feed = () => {
                 <ul>
                     <li className={styles.watchlist}>
                         <Watchlist
+                            watchlist={[]}
                             isPrivate={false}
                             watchlistId="lil_lily-01"
                             title="Lily's Anime Recs"
                             tags={["anime", "cartoon", "romance", "drama", "action", "adventure"]}
                             username='lil_lily'
                             items={["Spirited Away", "Howl's Moving Castle", "Graveyard of Fireflies", "Naruto"]}
+                            item=""
                             category='Anime'
                             saves={3}
                             likes={12}
                             comments={4}
                             onDelete={(watchlistId) => {
-                               watchlistId = "";
-                            }}
-                        />
-                    </li>
-                    <li className={styles.watchlist}>
-                        <Watchlist
-                            isPrivate={false}
-                            watchlistId="lil_lily-01"
-                            title="Lily's Anime Recs"
-                            tags={["anime", "cartoon", "romance", "drama", "action", "adventure"]}
-                            username='lil_lily'
-                            items={["Spirited Away", "Howl's Moving Castle", "Graveyard of Fireflies", "Naruto"]}
-                            category='Anime'
-                            saves={3}
-                            likes={12}
-                            comments={4}
-                            onDelete={(watchlistId) => {
-                               watchlistId = "";
-                            }}
-                        />
-                    </li>
-                    <li className={styles.watchlist}>
-                        <Watchlist
-                            isPrivate={false}
-                            watchlistId="lil_lily-01"
-                            title="Lily's Anime Recs"
-                            tags={["anime", "cartoon", "romance", "drama", "action", "adventure"]}
-                            username='lil_lily'
-                            items={["Spirited Away", "Howl's Moving Castle", "Graveyard of Fireflies", "Naruto"]}
-                            category='Anime'
-                            saves={3}
-                            likes={12}
-                            comments={4}
-                            onDelete={(watchlistId) => {
-                               watchlistId = "";
-                            }}
-                        />
-                    </li>
-                    <li className={styles.watchlist}>
-                        <Watchlist
-                            isPrivate={false}
-                            watchlistId="lil_lily-01"
-                            title="Lily's Anime Recs"
-                            tags={["anime", "cartoon", "romance", "drama", "action", "adventure"]}
-                            username='lil_lily'
-                            items={["Spirited Away", "Howl's Moving Castle", "Graveyard of Fireflies", "Naruto"]}
-                            category='Anime'
-                            saves={3}
-                            likes={12}
-                            comments={4}
-                            onDelete={(watchlistId) => {
-                               watchlistId = "";
+                            watchlistId = "";
                             }}
                         />
                     </li>

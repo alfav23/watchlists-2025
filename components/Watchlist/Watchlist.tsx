@@ -1,16 +1,17 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './Watchlist.module.scss';
 import Image from "next/image";
 import { CiStar, CiHeart } from 'react-icons/ci';
 import { TfiComment } from "react-icons/tfi";
-import { db } from '../../lib/firebaseConfig';
-import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
+import { db } from "../../lib/firebaseConfig";
+import { doc, updateDoc, collection, query, getDocs, setDoc, where } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { IoMdHeart } from "react-icons/io";
 import { FaStar } from "react-icons/fa6";
 
 interface WatchlistProps {
+    watchlist: object;
     isPrivate: boolean;
     watchlistId: string;
     title: string;
@@ -18,6 +19,7 @@ interface WatchlistProps {
     category: string;
     username: string;
     items: object;
+    item: string;
     saves: number;
     likes: number;
     comments: number;
@@ -25,6 +27,7 @@ interface WatchlistProps {
 }
 
 export default function Watchlist({
+    watchlist,
     isPrivate,
     username,
     watchlistId,
@@ -32,6 +35,7 @@ export default function Watchlist({
     tags,
     category,
     items,
+    item,
     saves,
     likes,
     comments,
@@ -45,6 +49,7 @@ export default function Watchlist({
     const [ likeCount, setLikeCount ] = useState(likes || 0);
     const [ isLiked, setIsLiked ] = useState(false);
     const [ commentCount, setCommentCount ] = useState(comments || 0);
+    const image = "/public/images/cinnamoroll.png";
     let status = "";
     
 
@@ -54,93 +59,125 @@ export default function Watchlist({
             status = "Public"
         }
 
-    const handleSave = async () => {
-        const newSaveCount = saveCount + 1;
-        setIsSaved(!isSaved);
-        setSaveCount(newSaveCount);
-        setStarDisplay((prevStarDisplay) => !prevStarDisplay);
+        const handleSave = async () => {
+            const newSaveCount = saveCount + 1;
+            setIsSaved(!isSaved);
+            setSaveCount(newSaveCount);
+            setStarDisplay((prevStarDisplay) => !prevStarDisplay);
 
-        // ***update saved watchlists array (not yet created)
+            // ***update saved watchlists array (not yet created)
 
-        try{
-            const watchlistRef = doc(db, "watchlists", watchlistId);
-            await updateDoc(watchlistRef, {
-                saves: newSaveCount,
-            });
-        } catch(error){
-            console.error("Failed to update save count", error);
+            try{
+                const watchlistRef = doc(db, "watchlists", watchlistId);
+                await updateDoc(watchlistRef, {
+                    saves: newSaveCount,
+                });
+            } catch(error){
+                console.error("Failed to update save count", error);
+            }
+        };
+
+        const handleLike = async() => {
+            const newLikeCount = likeCount + 1;
+            setIsLiked(!isLiked);
+            setLikeCount(newLikeCount);
+            setHeartDisplay((prevHeartDisplay) => !prevHeartDisplay);
         }
+
+        const handleComment = async () => {
+            const newCommentCount = commentCount + 1;
+            setCommentCount(newCommentCount);
+
+            return (
+                <div>
+                    {/* <CommentForm/> */}
+                </div>
+            )
+        }
+
+        const handleWatchlistClick = async () => {
+            router.push(`/${watchlistId}`)
+        }
+
+    // filter watchlists based on public or private status
+    const watchlists = collection(db, "watchlists");
+    const q = query(watchlists, where("private", "==", false));
+    const [publicWatchlists, setPublicWatchlists] = useState<any[]>([]);
+
+    useEffect(() => {
+        const fetchPublicWatchlists = async () => {
+            const querySnapshot = await getDocs(q);
+            const lists = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setPublicWatchlists(lists);
+        };
+        fetchPublicWatchlists();
+    }, []);
+
+    // get profile pic from users collection
+    const users = collection(db, "users");
+    const qU = query(users, where("userId", "==", "creatorId"));
+
+    const fetchCreator = async () =>{
+        const querySnapshotU = await getDocs(qU);
+        const userIds = querySnapshotU.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     };
-
-    const handleLike = async() => {
-        const newLikeCount = likeCount + 1;
-        setIsLiked(!isLiked);
-        setLikeCount(newLikeCount);
-        setHeartDisplay((prevHeartDisplay) => !prevHeartDisplay);
-    }
-
-    const handleComment = async () => {
-        const newCommentCount = commentCount + 1;
-        setCommentCount(newCommentCount);
-
-        return (
-            <div>
-                {/* <CommentForm/> */}
-            </div>
-        )
-    }
-
-    const handleWatchlistClick = async () => {
-        router.push(`/${watchlistId}`)
-    }
-
+    fetchCreator();
     return (
-        <div className={styles.watchlistContainer}>
-            <div onClick={handleWatchlistClick} className={styles.watchlist}>
-                <div className={styles.watchlistHeader}>
-                    <div className={styles.userInfo}>
-                        <Image 
-                            src="/images/cinnamoroll.png"
-                            width={50}
-                            height={50}
-                            alt='Lily profile pic'
-                        />
-                        <a href={username}>@{username}</a>
-                    </div>
-                    <div className={styles. watchlistDescription}>
-                        <p>{status}</p>
-                        <p>{category}</p>
-                        <p>Movies + Shows</p>
-                    </div>
-                </div>
-                <div className={styles.watchlistContent}>
-                    <h1 className={styles.watchlistTitle}>Lily's Anime Recs</h1>
-                    <ul className={styles.items}>
-                        <li className={styles.itemName}>Spirited Away</li>
-                        <li className={styles.itemName}>Howl's Moving Castle</li>
-                        <li className={styles.itemName}>Graveyard of Fireflies</li>
-                        <li className={styles.itemName}>Naruto</li>
-                    </ul>
-                    <div className={styles.tags}>
-                        Tags:
-                        <a href='#anime'>#anime</a>
-                        <a href="#cartoon"> #cartoon</a>
-                        <a href={`/${watchlistId}`}> #...</a>
-                    </div>
-                </div>
-            </div>
-            <div className={styles.reactions}>
-                <CiStar className={styles.favorite} onClick={handleSave}/>
-                <FaStar style={{ display: starDisplay ? "flex" : "none" }} className={styles.userFavorited}/>
-                <span>{saves}</span>
+        <div>
+            {publicWatchlists.length === 0 ? (
+                <p>Your feed is empty!</p>
+            ) : (
+                publicWatchlists.map((watchlist) => (
+                    <div key={watchlist.id} className={styles.watchlistContainer}>
+                        <div className={styles.watchlist}>
+                            <div className={styles.watchlistHeader}>
+                                <div className={styles.userInfo}>
+                                    <Image 
+                                    src={image}
+                                        // src={users.profilePic}
+                                        width={50}
+                                        height={50}
+                                        alt={`${watchlist.username} profile pic`}
+                                    />
+                                    <a href={watchlist.username}>@{watchlist.username}</a>
+                                </div>
+                                <div className={styles.watchlistDescription}>
+                                    <p>{watchlist.private ? "Private" : "Public"}</p>
+                                    <p>{watchlist.genre}</p>
+                                    <p>Movies + Shows</p>
+                                </div>
+                            </div>
+                            <div onClick={handleWatchlistClick} className={styles.watchlistContent}>
+                                <h1 className={styles.watchlistTitle}>{watchlist.title}</h1>
+                                {/* map watchlist.items */}
+                                <ul className={styles.items}>
+                                    {Array.isArray(watchlist.items) && watchlist.items.map((item: any, idx: number) =>
+                                        <li key={idx}>{item}</li>
+                                    )}
+                                </ul>
+                                <div className={styles.tags}>
+                                    Tags:
+                                    <a href='#anime'>#anime</a>
+                                    <a href="#cartoon"> #cartoon</a>
+                                    <a href={`/${watchlistId}`}> #...</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div className={styles.reactions}>
+                            <CiStar className={styles.favorite} onClick={handleSave}/>
+                            <FaStar style={{ display: starDisplay ? "flex" : "none" }} className={styles.userFavorited}/>
+                            <span>{saves}</span>
 
-                <CiHeart className={styles.like} onClick={handleLike}/>
-                <IoMdHeart style={{ display: heartDisplay ? "flex" : "none" }} className={styles.userLiked}/>
-                <span>{likes}</span>
+                            <CiHeart className={styles.like} onClick={handleLike}/>
+                            <IoMdHeart style={{ display: heartDisplay ? "flex" : "none" }} className={styles.userLiked}/>
+                            <span>{likes}</span>
 
-                <TfiComment className={styles.comment} onClick={handleComment}/>
-                <span>{comments}</span>
-            </div>
+                            <TfiComment className={styles.comment} onClick={handleComment}/>
+                            <span>{comments}</span>
+                        </div>
+                    </div>
+                ))
+            )}
         </div>
-    )
+    );
 }
