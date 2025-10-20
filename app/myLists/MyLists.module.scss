@@ -1,3 +1,4 @@
+
 .privateListsFeed {
     display: flex;
     margin-top: 100px;
@@ -19,14 +20,8 @@
     // background-color: #ffffba;
     margin-right: 10px;
     padding: 12px;
-    box-shadow: -5px 5px 0 black;
-    z-index: 0;
-
-    &:hover {
-            cursor: pointer;
-            box-shadow: inset -3px 3px 0 black;
-            transform: translateY(.25rem);
-        }
+    // box-shadow: -5px 5px 0 black;
+    // z-index: 0;
 
     a {
         font-size: 12px;

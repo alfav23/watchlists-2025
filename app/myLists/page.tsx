@@ -8,12 +8,21 @@ import { FaTrash } from "react-icons/fa";
 import onDelete from "../../components/Watchlist";
 import { MdEdit } from 'react-icons/md';
 import { FaEye } from 'react-icons/fa6';
-// import { getAuth } from 'firebase/auth';
+import { getAuth, onAuthStateChanged} from 'firebase/auth';
 
 const privateWatchlistsPage = () => {
+
+    onAuthStateChanged(getAuth(), (user) => {
+        if (user) {
+            // const username = user.userName;
+            console.log("User is signed in:", user);
+            // console.log("User username:", username);
+        } else {
+            console.log("User is signed out.");    
+        }
+    });
+
     // // add back when user has profile image option
-    // const auth = getAuth();
-    // const user = auth.currentUser;
     // const image = user.profileImage;
     const image = "/public/images/cinnamoroll.png";
     const colorPalette = ["#ffb3ba", "#ffdfba", "#ffffba", "#baffc9", "#bae1ff"];
@@ -40,9 +49,11 @@ const privateWatchlistsPage = () => {
     }, []);
 
     return (
+    <div className={styles.mainContent}>
+        {/* <h1>{username}'s private watchlists</h1> */}
         <div className={styles.privateListsFeed}>
             {privateWatchlists.length === 0 ? (
-                <p>Your feed is empty!</p>
+                <p>Nothing to see here!</p>
             ) : (
                 privateWatchlists.map((watchlist) => (
                     <div key={watchlist.id} className={styles.watchlistContainer}>
@@ -92,6 +103,7 @@ const privateWatchlistsPage = () => {
                 ))
             )}
         </div>
+    </div>
     );
 }
 
