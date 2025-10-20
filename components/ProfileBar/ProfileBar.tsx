@@ -21,10 +21,12 @@ export const ProfileBar = () => {
                     height={50}
                     alt=""
                 />
-                {/* name */}
-                <p>notalyssa</p>
-                {/* username */}
-                <p>@notalyssa</p>
+                <div className={styles.handle}>
+                    {/* name */}
+                    <p>notalyssa</p>
+                    {/* username */}
+                    <p>@notalyssa</p>
+                </div>
             </div>
             <div className={styles.userOptions}>
                 <Link href='/my-watchlists'>My Watchlists</Link>
