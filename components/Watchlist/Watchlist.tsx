@@ -50,6 +50,7 @@ export default function Watchlist({
     const [ isLiked, setIsLiked ] = useState(false);
     const [ commentCount, setCommentCount ] = useState(comments || 0);
     const image = "/public/images/cinnamoroll.png";
+    const colorPalette = ["#ffb3ba", "#ffdfba", "#ffffba", "#baffc9", "#bae1ff"];
     
         let status = ""
 
@@ -131,7 +132,7 @@ export default function Watchlist({
             ) : (
                 publicWatchlists.map((watchlist) => (
                     <div key={watchlist.id} className={styles.watchlistContainer}>
-                        <div className={styles.watchlist}>
+                        <div style={{backgroundColor: `${colorPalette[Math.floor(Math.random()*(5 - 0 + 1) + 0)]}`}} className={styles.watchlist}>
                             <div className={styles.watchlistHeader}>
                                 <div className={styles.userInfo}>
                                     <Image 

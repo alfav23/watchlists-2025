@@ -1,4 +1,5 @@
 .feedContainer {
+    position: relative;
     display: flex;
     flex-direction: column;
     padding: 20px;
@@ -17,19 +18,23 @@
     margin-bottom: 20%;
 }
 
+.feedFooter {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: auto;
+  background-color: rgb(255, 255, 255);
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
 .createWatchlist {
-  position: fixed;
-  left: 60%;
-  bottom: 20%;
-  // font-family: "PressStart2P", sans-serif;
-  // font-size: 16px;
-  // width: 200px;
-  // text-align: center;
   margin: auto;
   padding: 0;
+  margin: 0;
   border: none;
   background-color: transparent;
-  // border-radius: 6px;
 
   :hover {
     cursor: pointer;
@@ -48,5 +53,12 @@
 
   .feedTitle {
     display: none;
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .feedTitle {
+    display: flex;
+    justify-content: center;
   }
 }

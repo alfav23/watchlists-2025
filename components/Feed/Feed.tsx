@@ -47,9 +47,17 @@ export const Feed = () => {
                     </li>
                 </ul>
             </div>
-            <button onClick={handleCreateNewWatchlist} className={styles.createWatchlist}>
-                <MdAddBox style={{fontSize: 80, color: "#f38b8bff"}}/>
-            </button>
+            <div className={styles.feedFooter}>
+                <button 
+                    onClick={handleCreateNewWatchlist} 
+                    className={styles.createWatchlist}>
+                        <MdAddBox 
+                            style={
+                                {fontSize: 80, color: "#f38b8bff"}}
+                        />
+                </button>
+            </div>
+                
         </div>
     )
 }
