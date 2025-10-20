@@ -1,15 +1,17 @@
 import styles from './Feed.module.scss';
 import Watchlist  from '../Watchlist';
-import { SiVoidlinux } from 'react-icons/si';
+import { MdAddBox } from "react-icons/md";
 
 export const Feed = () => {
     return (
         <div className={styles.feedContainer}>
             <div className={styles.feedTitle}>
                 <h1>Feed</h1>
-                <button className={styles.friendsTab}>friends</button>
-                <button className={styles.everyoneTab}>everyone
-                </button>
+                {/* <div className={styles.feedTabs}>
+                    <button className={styles.friendsTab}>friends</button>
+                    <button className={styles.everyoneTab}>everyone
+                    </button>
+                </div> */}
             </div>
             <div className={styles.watchlistsContainer}>
                 <ul>
@@ -17,16 +19,16 @@ export const Feed = () => {
                         <Watchlist
                             watchlist={[]}
                             isPrivate={false}
-                            watchlistId="watchlist-id"
-                            title="title"
-                            tags={["anime", "cartoon", "romance", "drama", "action", "adventure"]}
-                            username='username'
-                            items={["Spirited Away", "Howl's Moving Castle", "Graveyard of Fireflies", "Naruto"]}
+                            watchlistId=""
+                            title=""
+                            tags={[]}
+                            username=''
+                            items={[]}
                             item=""
-                            category='Anime'
-                            saves={3}
-                            likes={12}
-                            comments={4}
+                            genre=''
+                            saves={0}
+                            likes={0}
+                            comments={0}
                             onDelete={(watchlistId) => {
                             watchlistId = "";
                             }}
@@ -34,6 +36,10 @@ export const Feed = () => {
                     </li>
                 </ul>
             </div>
+            <button className={styles.createWatchlist}>
+                Create Watchlist 
+                <MdAddBox />
+            </button>
         </div>
     )
 }

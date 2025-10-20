@@ -1,17 +1,50 @@
 .discoverContainer {
-    width: 25%;
     padding: 20px;
-    // margin-right: 25px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    gap: 1rem;
     background-color: #ffffba;
     border-radius: 6px;
     border: 1px solid black;
-    box-shadow: -8px 8px 0 black;
+    // box-shadow: -8px 8px 0 black;
 }
 
-@media screen and (max-width: 480px) {
+.searchContainer {
+  display: flex;
+  position: relative;
+}
+
+.search {
+  width: 100%;
+  border-radius: 8px;
+  font-family: "PressStart2P", sans-serif;
+  font-size: 8px;
+  padding: .35rem;
+}
+
+.searchIcon {
+  position: absolute;
+  right: .5rem;
+  bottom: .32rem;
+  font-size: small;
+}
+
+.userOptions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-size: 10px;
+    margin-top: 10px;
+    
+
+    a {
+        text-decoration: none;
+        color: plum
+    }
+}
+
+@media screen and (max-width: 425px) {
   .discoverContainer {
     display: none;
   }

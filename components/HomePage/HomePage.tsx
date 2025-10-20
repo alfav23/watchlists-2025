@@ -12,9 +12,14 @@ export const HomePage = () => {
                 <Header />
             </div>
             <div className={styles.mainContent}>
-                <Discover />
-                <Feed />
-                <ProfileBar />
+                <div className={styles.leftSideBar}>
+                    <ProfileBar />
+                    <Discover />
+                </div>
+                <div className={styles.feed}>
+                    <Feed />
+                </div>
+                
             </div>
         </div>
     )

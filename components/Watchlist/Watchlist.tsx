@@ -120,8 +120,10 @@ export default function Watchlist({
     const fetchCreator = async () =>{
         const querySnapshotU = await getDocs(qU);
         const userIds = querySnapshotU.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
     };
     fetchCreator();
+
     return (
         <div>
             {publicWatchlists.length === 0 ? (
@@ -156,7 +158,7 @@ export default function Watchlist({
                                     )}
                                 </ul>
                                 <div className={styles.tags}>
-                                    <p>Tags</p>
+                                    <p>Tags:</p>
                                     {Array.isArray(watchlist.tags) && watchlist.tags.map((item: any, idx: number) =>
                                         <a key={idx}>#{item}</a>
                                     )}

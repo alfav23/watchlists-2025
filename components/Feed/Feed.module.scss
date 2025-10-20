@@ -1,16 +1,15 @@
 .feedContainer {
-    width: 50%;
     display: flex;
     flex-direction: column;
     padding: 20px;
-    border-radius: 6px;
-    border: 1px solid black;
-    box-shadow: -8px 8px 0 black;
+    // border-radius: 6px;
+    border-left: 1px solid black;
+    overflow-y: scroll;
 }
 
 .watchlistsContainer {
     display: flex;
-    align-items: center;
+    justify-content: center;
 }
 
 .watchlist {
@@ -18,11 +17,32 @@
     margin-bottom: 20%;
 }
 
-@media screen and (max-width: 480px) {
+.createWatchlist {
+  position: fixed;
+  left: 50%;
+  bottom: 20%;
+  font-family: "PressStart2P", sans-serif;
+  font-size: 16px;
+  max-width: 200px;
+  text-align: center;
+  margin: auto;
+  padding: 1rem;
+  border: 1px solid black;
+  background-color: rgb(243, 139, 139);
+  border-radius: 6px;
+}
+
+@media screen and (max-width: 425px) {
   .feedContainer {
-    width: 65%;
-    justify-content: center;
+    max-width: 250px;
+    align-items: center;
     border: none;
     box-shadow: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .feedTitle {
+    display: none;
   }
 }

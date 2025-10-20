@@ -1,15 +1,30 @@
 .container {
     width: 100%;
-    display: block;
-    // min-height: 100vh;
-    margin: 0;
-    padding: 0;
 }
 
 .mainContent {
-    width: 100%;
     display: flex;
+    border: 2px solid black;
+    border-radius: 6px;
+    box-shadow: -8px 8px 0 black;
     gap: 25px;
     margin: 0;
-    padding: 0;
+    padding: 20px;
+}
+
+.leftSideBar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 25%;
+}
+
+.feed {
+    width: 75%;
+}
+
+@media screen and (max-width: 425px) {
+    .lefSideBar {
+        display: none;
+    }
 }
