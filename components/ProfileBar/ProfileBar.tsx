@@ -29,7 +29,7 @@ export const ProfileBar = () => {
                 </div>
             </div>
             <div className={styles.userOptions}>
-                <Link href='/my-watchlists'>My Watchlists</Link>
+                <Link href='/myLists'>My Watchlists</Link>
                 <Link href="/my-reviews">My Reviews</Link>
                 <Link href="/profile-settings">Profile Settings</Link>
                 <a onClick={handleCreateWatchlist} href="#watchlist-form">Create New Watchlist</a>

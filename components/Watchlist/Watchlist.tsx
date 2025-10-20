@@ -9,6 +9,7 @@ import { doc, updateDoc, collection, query, getDocs, setDoc, where } from 'fireb
 import { useRouter } from 'next/navigation';
 import { IoMdHeart } from "react-icons/io";
 import { FaStar } from "react-icons/fa6";
+import { getAuth } from 'firebase/auth';
 
 interface WatchlistProps {
     watchlist: object;
@@ -114,16 +115,16 @@ export default function Watchlist({
         fetchPublicWatchlists();
     }, []);
 
-    // get profile pic from users collection
-    const users = collection(db, "users");
-    const qU = query(users, where("userId", "==", "creatorId"));
+    // // get profile pic from users collection
+    // const users = collection(db, "users");
+    // const qU = query(users, where("userId", "==", "creatorId"));
 
-    const fetchCreator = async () =>{
-        const querySnapshotU = await getDocs(qU);
-        const userIds = querySnapshotU.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    // const fetchCreator = async () =>{
+    //     const querySnapshotU = await getDocs(qU);
+    //     const userIds = querySnapshotU.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-    };
-    fetchCreator();
+    // };
+    // fetchCreator();
 
     return (
         <div>
@@ -136,13 +137,14 @@ export default function Watchlist({
                             <div className={styles.watchlistHeader}>
                                 <div className={styles.userInfo}>
                                     <Image 
+                                        style={{background: `${colorPalette[Math.floor(Math.random()*(4 - 0 + 1) + 0)]}`}}
                                         src={image}
-                                        // src={users.profilePic}
+                                        // src={creatorID.profilePic}
                                         width={50}
                                         height={50}
-                                        alt={`${watchlist.username} profile pic`}
+                                        alt=''
                                     />
-                                    <a href={watchlist.username}>@{watchlist.username}</a>
+                                    <a href={watchlist.creatorID}>@{watchlist.creatorID}</a>
                                 </div>
                                 <div className={styles.watchlistDescription}>
                                     <p>{watchlist.private ? "Private" : "Public"}</p>

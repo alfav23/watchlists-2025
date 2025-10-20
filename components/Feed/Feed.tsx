@@ -6,11 +6,15 @@ import WatchlistForm from '../WatchlistForm';
 
 // const router = useRouter();
 const handleCreateNewWatchlist = () => {
+    console.log("watchlist form successfully generated");
+    
     return (
-        <div>
+        <div className={styles.watchlistForm}>
             <WatchlistForm />
         </div>
     )
+
+    
 }
 
 export const Feed = () => {
