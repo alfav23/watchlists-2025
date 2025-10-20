@@ -1,6 +1,17 @@
 import styles from './Feed.module.scss';
 import Watchlist  from '../Watchlist';
 import { MdAddBox } from "react-icons/md";
+import WatchlistForm from '../WatchlistForm';
+// import { useRouter } from 'next/router';
+
+// const router = useRouter();
+const handleCreateNewWatchlist = () => {
+    return (
+        <div>
+            <WatchlistForm />
+        </div>
+    )
+}
 
 export const Feed = () => {
     return (
@@ -36,9 +47,8 @@ export const Feed = () => {
                     </li>
                 </ul>
             </div>
-            <button className={styles.createWatchlist}>
-                Create Watchlist 
-                <MdAddBox />
+            <button onClick={handleCreateNewWatchlist} className={styles.createWatchlist}>
+                <MdAddBox style={{fontSize: 80, color: "#f38b8bff"}}/>
             </button>
         </div>
     )
