@@ -9,7 +9,8 @@ import { doc, updateDoc, collection, query, getDocs, setDoc, where } from 'fireb
 import { useRouter } from 'next/navigation';
 import { IoMdHeart } from "react-icons/io";
 import { FaStar } from "react-icons/fa6";
-import { getAuth } from 'firebase/auth';
+import CommentForm  from "../CommentForm";
+// import { getAuth } from 'firebase/auth';
 
 interface WatchlistProps {
     watchlist: object;
@@ -28,19 +29,11 @@ interface WatchlistProps {
 }
 
 export default function Watchlist({
-    watchlist,
     isPrivate,
-    username,
     watchlistId,
-    title,
-    tags,
-    genre,
-    items,
-    item,
     saves,
     likes,
-    comments,
-    onDelete
+    comments
 }: WatchlistProps) {
     const router = useRouter();
     const [ heartDisplay, setHeartDisplay ] = useState(false);
@@ -67,13 +60,12 @@ export default function Watchlist({
             setSaveCount(newSaveCount);
             setStarDisplay((prevStarDisplay) => !prevStarDisplay);
 
-            // ***update saved watchlists array (not yet created)
-
             try{
                 const watchlistRef = doc(db, "watchlists", watchlistId);
                 await updateDoc(watchlistRef, {
                     saves: newSaveCount,
                 });
+                console.log(watchlistId, "saves:", newSaveCount);
             } catch(error){
                 console.error("Failed to update save count", error);
             }
@@ -84,22 +76,50 @@ export default function Watchlist({
             setIsLiked(!isLiked);
             setLikeCount(newLikeCount);
             setHeartDisplay((prevHeartDisplay) => !prevHeartDisplay);
-        }
 
-        const handleComment = async () => {
+            try{
+                const watchlistRef = doc(db, "watchlists", watchlistId);
+                await updateDoc(watchlistRef, {
+                    likes: newLikeCount,
+                });
+                console.log(watchlistId, "likes:", newLikeCount);
+            } catch(error){
+                console.error("Failed to update like count", error);
+            }
+        };
+
+        const handleCommentSubmit = async() => {
+        
             const newCommentCount = commentCount + 1;
             setCommentCount(newCommentCount);
 
+            try {
+                const watchlistRef = doc(db, "watchlists", watchlistId);
+                await updateDoc(watchlistRef, {
+                    comments: newCommentCount,
+                });
+                    console.log(watchlistId, "comments:", newCommentCount);
+                } catch (error) {
+                    console.error("Failed to update comment count", error);
+                }
+
+            };
+
+        const handleCommentClick = async () => {
+            console.log("Leave a comment");
             return (
-                <div>
-                    {/* <CommentForm/> */}
+                <div className={styles.commentFormContainer}>
+                    <form onSubmit={handleCommentSubmit}>
+                        <CommentForm/>
+                    </form>
                 </div>
             )
-        }
+            
+        };
 
         const handleWatchlistClick = async () => {
             router.push(`/${watchlistId}`)
-        }
+        };
 
     // filter watchlists based on public or private status
     const watchlists = collection(db, "watchlists");
@@ -177,7 +197,7 @@ export default function Watchlist({
                             <IoMdHeart style={{ display: heartDisplay ? "flex" : "none" }} className={styles.userLiked}/>
                             <span>{likes}</span>
 
-                            <TfiComment className={styles.comment} onClick={handleComment}/>
+                            <TfiComment className={styles.comment} onClick={handleCommentClick}/>
                             <span>{comments}</span>
                         </div>
                     </div>
