@@ -21,14 +21,12 @@ const WatchlistForm = () => {
     const [ isPrivate, setIsPrivate ] = useState<boolean>(true);
 
     const handleAddShow = () => {
-        setItem(item);
         items.push(item);
         setItems(items);
         console.log("Show added:", item, "to list:", items)
     }
 
     const handleAddTag = async () => {
-        setTag(tag);
         tags.push(tag);
         setTags(tags);
         console.log("Show added:", tag, "to list:", tags)
@@ -40,10 +38,18 @@ const WatchlistForm = () => {
         const collectionRef = collection(db, "watchlists");
         const newWatchlistData = {
             creatorID: user ? user.uid : null,
+            title: title,
             genre: genre,
             items: items,
             tags: tags,
-            private: isPrivate
+            private: isPrivate,
+            likes: 0,
+            saves: 0,
+            comments: {
+                commentCount: 0,
+                comments: [""]
+            },
+            favorited: false
         }
 
         try {
@@ -86,10 +92,15 @@ const WatchlistForm = () => {
                             </li>
                         )))}
                     </ul>
-                    <form>
-                        <input value={item} type="text" />
-                        <button 
-                            onSubmit={handleAddShow} 
+                    <form className={styles.addItemForm} onSubmit={handleAddShow}>
+                        <input 
+                            value={item} 
+                            type="text" 
+                            placeholder="Movie or show title"
+                            onChange={(e) => setItem(e.target.value)}
+                        />
+                        <button  
+                            type="submit"
                             className={styles.addShowButton}
                         >
                             Add movie or show to your list!
@@ -106,10 +117,14 @@ const WatchlistForm = () => {
                             </li>
                         )))}
                     </ul>
-                    <form>
-                        <input value={tag} type="text" />
-                        <button 
-                            onSubmit={handleAddTag} 
+                    <form className={styles.addTagForm} onSubmit={handleAddTag}>
+                        <input 
+                            value={tag} 
+                            type="text"
+                            placeholder="Enter a tag"
+                            onChange={(e) => setTag(e.target.value)}
+                        />
+                        <button  
                             className={styles.addTagButton}
                         >
                             Add tags
