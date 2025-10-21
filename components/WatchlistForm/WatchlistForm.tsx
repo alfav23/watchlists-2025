@@ -2,7 +2,7 @@
 import styles from "./WatchlistForm.module.scss";
 import { getAuth } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebaseConfig";
 import { useState } from "react";
 
@@ -13,13 +13,25 @@ const WatchlistForm = () => {
 
     // watchlist data values
     const [ genre, setGenre ] = useState<string>("");
+    const [ item, setItem ] = useState<string>("");
     const [ items, setItems ] = useState<string[]>([]);
     const [ tags, setTags ] = useState<string[]>([]);
+    const [ tag, setTag ] = useState<string>("");
     const [ title, setTitle ] = useState<string>("");
     const [ isPrivate, setIsPrivate ] = useState<boolean>(true);
 
     const handleAddShow = () => {
-       items.push();
+        setItem(item);
+        items.push(item);
+        setItems(items);
+        console.log("Show added:", item, "to list:", items)
+    }
+
+    const handleAddTag = async () => {
+        setTag(tag);
+        tags.push(tag);
+        setTags(tags);
+        console.log("Show added:", tag, "to list:", tags)
     }
 
     const pushList = async(event: React.FormEvent) => {
@@ -75,7 +87,7 @@ const WatchlistForm = () => {
                         )))}
                     </ul>
                     <form>
-                        <input type="text" />
+                        <input value={item} type="text" />
                         <button 
                             onSubmit={handleAddShow} 
                             className={styles.addShowButton}
@@ -84,7 +96,27 @@ const WatchlistForm = () => {
                         </button>
                     </form>
                 </div>
-                <p>Public lists will appear on the feed.</p>
+                <div className={styles.addTagSection}>
+                    <ul className={styles.tagsList}>
+                        {tags.length === 0 ? (
+                            <p>Add some tags so people can find your list!</p>
+                        ) : (
+                        tags.map((tag) => (
+                            <li key={tag.indexOf(tag)} className={styles.tag}>
+                            </li>
+                        )))}
+                    </ul>
+                    <form>
+                        <input value={tag} type="text" />
+                        <button 
+                            onSubmit={handleAddTag} 
+                            className={styles.addTagButton}
+                        >
+                            Add tags
+                        </button>
+                    </form>
+                </div>
+                <p>Public lists will appear on the public feed.</p>
                 <p>{`Private lists will only be visible to you${user ? `, ${user.displayName || user.email}` : '' }!`}</p>
                 <select 
                     name="status-setting" 
@@ -95,7 +127,7 @@ const WatchlistForm = () => {
                     <option value="private">Private</option>
                     <option value="public">Public</option>
                 </select>
-                <button type="submit">Create Watchlist</button>
+                <button className={styles.publishWatchlistButton} type="submit">Publish Watchlist</button>
             </form>
         </div>
     )
