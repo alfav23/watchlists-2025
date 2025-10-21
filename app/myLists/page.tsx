@@ -4,23 +4,30 @@ import { db } from "@/lib/firebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Image from 'next/image';
-import { FaTrash } from "react-icons/fa";
+import { FaSearch, FaTrash } from "react-icons/fa";
 import onDelete from "../../components/Watchlist";
 import { MdEdit } from 'react-icons/md';
 import { FaEye } from 'react-icons/fa6';
 import { getAuth, onAuthStateChanged} from 'firebase/auth';
+import Link from 'next/link';
 
 const privateWatchlistsPage = () => {
+    const fetchUserData = async() => {
+        const auth = getAuth();
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log("User is signed in:", user);
+            } else {
+                console.log("User is signed out.");    
+            }
+            
+        });
+    }
 
-    onAuthStateChanged(getAuth(), (user) => {
-        if (user) {
-            // const username = user.userName;
-            console.log("User is signed in:", user);
-            // console.log("User username:", username);
-        } else {
-            console.log("User is signed out.");    
-        }
-    });
+    fetchUserData;
+//UNCOMMENT THIS
+    // const displayName = user.displayName;
+    // const username = displayName.replace(/\s/g, '')
 
     // // add back when user has profile image option
     // const image = user.profileImage;
@@ -37,7 +44,9 @@ const privateWatchlistsPage = () => {
 // filter watchlists based on public or private status
     const watchlists = collection(db, "watchlists");
     const q = query(watchlists, where("private", "==", true));
+    const qS = query(watchlists, where("favorited", "==", true));
     const [privateWatchlists, setPrivateWatchlists] = useState<any[]>([]);
+    const [savedWatchlists, setSavedWatchlists] = useState<any[]>([]);
 
     useEffect(() => {
         const fetchPrivateWatchlists = async () => {
@@ -48,62 +57,163 @@ const privateWatchlistsPage = () => {
         fetchPrivateWatchlists();
     }, []);
 
+    useEffect(() => {
+        const fetchSavedWatchlists = async () => {
+            const querySnapshot = await getDocs(qS);
+            const lists = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setSavedWatchlists(lists);
+        };
+        fetchSavedWatchlists();
+    }, []);
+
     return (
-    <div className={styles.mainContent}>
-        {/* <h1>{username}'s private watchlists</h1> */}
-        <div className={styles.privateListsFeed}>
-            {privateWatchlists.length === 0 ? (
-                <p>Nothing to see here!</p>
-            ) : (
-                privateWatchlists.map((watchlist) => (
-                    <div key={watchlist.id} className={styles.watchlistContainer}>
-                        <div style={{backgroundColor: `${colorPalette[Math.floor(Math.random()*(4 - 0 + 1) + 0)]}`}} className={styles.watchlist}>
-                            <div className={styles.watchlistHeader}>
-                                <div className={styles.userInfo}>
-                                    <Image 
-                                        style={{background: `${colorPalette[Math.floor(Math.random()*(4 - 0 + 1) + 0)]}`}}
-                                        src={image}
-                                        // src={creatorID.profilePic}
-                                        width={50}
-                                        height={50}
-                                        alt=''
-                                    />
-                                    <a href={watchlist.creatorID}>@{watchlist.creatorID}</a>
-                                </div>
-                                <div className={styles.watchlistDescription}>
-                                    <p>{watchlist.private ? "Private" : "Public"}</p>
-                                    <p>{watchlist.genre}</p>
-                                    <p>Movies + Shows</p>
-                                </div>
-                            </div>
-                            <div className={styles.watchlistContent}>
-                                <h1 className={styles.watchlistTitle}>{watchlist.title}</h1>
-                                {/* map watchlist.items */}
-                                <ul className={styles.items}>
-                                    {Array.isArray(watchlist.items) && watchlist.items.map((item: any, idx: number) =>
-                                        <li key={idx}>{item}</li>
-                                    )}
-                                </ul>
-                                <div className={styles.tags}>
-                                    <p>Tags:</p>
-                                    {Array.isArray(watchlist.tags) && watchlist.tags.map((item: any, idx: number) =>
-                                        <a key={idx}>#{item}</a>
-                                    )}
-                                </div>
+        <div className={styles.mainContent}>
+            {/* <h1>{username}'s watchlists</h1> */}
+            <div className={styles.headerContainer}>
+                <h1>notalyssa's watchlists</h1>
+            </div>
+            <div>
+                <div className={styles.profileBarContainer}>
+                    <div className={styles.profileBarInner}>
+                        <div className={styles.searchContainer}>
+                            <input className={styles.search} type="text" placeholder="Search"/>
+                            <div className={styles.searchIcon}>
+                                <FaSearch />  
                             </div>
                         </div>
-                        <div className={styles.actions}>
-                            <FaEye className={styles.makePublic} onClick={handleMakePublic}/>
-
-                            <MdEdit className={styles.edit} onClick={handleEdit}/>
-
-                            <FaTrash className={styles.delete} onClick={() => onDelete(watchlist.id)}/>
+                        <div className={styles.userInfo}>
+                            <Image 
+                                src="/images/cinnamoroll.png"
+                                width={50}
+                                height={50}
+                                alt=""
+                            />
+                            <div className={styles.handle}>
+                                {/* name */}
+                                <p>notalyssa</p>
+                                {/* username */}
+                                <p>@notalyssa</p>
+                            </div>
                         </div>
                     </div>
-                ))
-            )}
+                    <div className={styles.userOptions}>
+                        <Link href='/'>Feed</Link>
+                        / 
+                        <Link href="/my-reviews">My Reviews</Link>
+                        / 
+                        <Link href="/profile-settings">Profile Settings</Link>
+                        / 
+                        <a onClick={() => {}} href="#watchlist-form">Create New Watchlist</a>
+                        / 
+                        <a onClick={() => {}} href="#review-form">Write a Review</a>
+                    </div>
+                </div>
+            </div>
+            <div className={styles.privateListsFeed}>
+                {privateWatchlists.length === 0 ? (
+                    <p>Nothing to see here!</p>
+                ) : (
+                    privateWatchlists.map((watchlist) => (
+                        <div key={watchlist.id} className={styles.watchlistContainer}>
+                            <div style={{backgroundColor: `${colorPalette[Math.floor(Math.random()*(4 - 0 + 1) + 0)]}`}} className={styles.watchlist}>
+                                
+                                <div className={styles.watchlistHeader}>
+                                    <div className={styles.userInfo}>
+                                        <Image 
+                                            style={{background: `${colorPalette[Math.floor(Math.random()*(4 - 0 + 1) + 0)]}`}}
+                                            src={image}
+                                            // src={creatorID.profilePic}
+                                            width={50}
+                                            height={50}
+                                            alt=''
+                                        />
+                                    <a href="/notalyssa">@notalyssa</a>
+                                    </div>
+                                    <div className={styles.watchlistDescription}>
+                                        <p>{watchlist.private ? "Private" : "Public"}</p>
+                                        <p>{watchlist.genre}</p>
+                                        <p>Movies + Shows</p>
+                                    </div>
+                                </div>
+                                <div className={styles.watchlistContent}>
+                                    <h1 className={styles.watchlistTitle}>{watchlist.title}</h1>
+                                    {/* map watchlist.items */}
+                                    <ul className={styles.items}>
+                                        {Array.isArray(watchlist.items) && watchlist.items.map((item: any, idx: number) =>
+                                            <li key={idx}>{item}</li>
+                                        )}
+                                    </ul>
+                                    <button className={styles.addNewItem}>Add New Item</button>
+                                    <div className={styles.tags}>
+                                        <p>Tags:</p>
+                                        {Array.isArray(watchlist.tags) && watchlist.tags.map((item: any, idx: number) =>
+                                            <a key={idx}>#{item}</a>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className={styles.actions}>
+                                    <FaEye className={styles.makePublic} onClick={handleMakePublic}/>
+
+                                    <MdEdit className={styles.edit} onClick={handleEdit}/>
+
+                                    <FaTrash className={styles.delete} onClick={() => onDelete(watchlist.id)}/>
+                                </div>
+                            </div>
+                        </div>
+                    ))
+                )}
+            </div>
+            {/* favorited/starred watchlists */}
+            <div className={styles.savedListsFeed}>
+                {savedWatchlists.length === 0 ? (
+                    <p>Nothing to see here!</p>
+                ) : (
+                    savedWatchlists.map((watchlist) => (
+                        <div key={watchlist.id} className={styles.watchlistContainer}>
+                            <div style={{backgroundColor: `${colorPalette[Math.floor(Math.random()*(4 - 0 + 1) + 0)]}`}} className={styles.watchlist}>
+                                
+                                <div className={styles.watchlistHeader}>
+                                    <div className={styles.userInfo}>
+                                        <Image 
+                                            style={{background: `${colorPalette[Math.floor(Math.random()*(4 - 0 + 1) + 0)]}`}}
+                                            src={image}
+                                            // src={creatorID.profilePic}
+                                            width={50}
+                                            height={50}
+                                            alt=''
+                                        />
+                                    <a href={`/${watchlist.creatorID}`}>@{watchlist.creatorID}</a>
+                                    </div>
+                                    <div className={styles.watchlistDescription}>
+                                        <p>{watchlist.private ? "Private" : "Public"}</p>
+                                        <p>{watchlist.genre}</p>
+                                        <p>Movies + Shows</p>
+                                    </div>
+                                </div>
+                                <div className={styles.watchlistContent}>
+                                    <h1 className={styles.watchlistTitle}>{watchlist.title}</h1>
+                                    {/* map watchlist.items */}
+                                    <ul className={styles.items}>
+                                        {Array.isArray(watchlist.items) && watchlist.items.map((item: any, idx: number) =>
+                                            <li key={idx}>{item}</li>
+                                        )}
+                                    </ul>
+                                    <div className={styles.tags}>
+                                        <p>Tags:</p>
+                                        {Array.isArray(watchlist.tags) && watchlist.tags.map((item: any, idx: number) =>
+                                            <a key={idx}>#{item}</a>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className={styles.actions}>
+                                    <p style={{fontSize: 8}}>Unsave Icon Here</p>
+                                </div>
+                            </div>
+                        </div>
+                    ))
+                )}
+            </div>
         </div>
-    </div>
     );
 }
 
