@@ -39,7 +39,12 @@
 
     a {
         text-decoration: none;
-        color: plum
+        color: plum;
+
+        &:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
     }
 }
 

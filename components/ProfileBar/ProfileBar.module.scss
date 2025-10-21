@@ -20,12 +20,15 @@
 
 .userInfo {
     display: flex;
-    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     border-radius: 6px;
     border: 1px solid black;
     padding: 10px;
+
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 .userOptions {
@@ -39,7 +42,12 @@
 
     a {
         text-decoration: none;
-        color: plum
+        color: plum;
+
+        &:hover{
+            cursor: pointer;
+            text-decoration: underline;
+        }
     }
 }
 
