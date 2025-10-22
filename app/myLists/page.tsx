@@ -1,7 +1,7 @@
 "use client";
 import styles from './MyLists.module.scss';
 import { db } from "@/lib/firebaseConfig";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Image from 'next/image';
 import { FaSearch, FaTrash } from "react-icons/fa";
@@ -31,14 +31,34 @@ const privateWatchlistsPage = () => {
 
     // // add back when user has profile image option
     // const image = user.profileImage;
+
     const image = "/public/images/cinnamoroll.png";
     const colorPalette = ["#ffb3ba", "#ffdfba", "#ffffba", "#baffc9", "#bae1ff"];
 
-    const handleEdit = () => {
-        
+    const handleDeleteItem = async (items: any) => {
+        const docRef = doc(db, "watchlists", items.idx)
+        await deleteDoc(docRef);
+        console.log("Item successfully deleted");
     }
 
-    const handleMakePublic = () => {
+    const handleEdit = () => {
+        // <EditForm /> 
+    }
+
+    const handleSubmitEdit = async () => {
+
+    }
+
+    const handleMakePublic = async (watchlist: any) => {
+        try {
+            const docRef = doc(db, "watchlists", watchlist);
+            await updateDoc(docRef, {
+                private: false
+            });
+                console.log(watchlist, "successfully made public");
+            } catch (error) {
+                console.error("Failed to update watchlist status", error);
+            }
     }
 
 // filter watchlists based on public or private status
@@ -139,14 +159,17 @@ const privateWatchlistsPage = () => {
                                     <h1 className={styles.watchlistTitle}>{watchlist.title}</h1>
                                     {/* map watchlist.items */}
                                     <ul className={styles.items}>
-                                        {Array.isArray(watchlist.items) && watchlist.items.map((item: any, idx: number) =>
-                                            <li key={idx}>{item}</li>
+                                        {Array.isArray(watchlist.items) && watchlist.items.map((item: string, idx: number) =>
+                                            <li key={idx}>
+                                                {item}
+                                                {/* <a onClick={handleDeleteItem}> X</a> */}
+                                            </li>
                                         )}
                                     </ul>
                                     <button className={styles.addNewItem}>Add New Item</button>
                                     <div className={styles.tags}>
                                         <p>Tags:</p>
-                                        {Array.isArray(watchlist.tags) && watchlist.tags.map((item: any, idx: number) =>
+                                        {Array.isArray(watchlist.tags) && watchlist.tags.map((item: string, idx: number) =>
                                             <a key={idx}>#{item}</a>
                                         )}
                                     </div>
