@@ -12,8 +12,9 @@ import { getAuth, onAuthStateChanged} from 'firebase/auth';
 import Link from 'next/link';
 
 const privateWatchlistsPage = () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
     const fetchUserData = async() => {
-        const auth = getAuth();
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 console.log("User is signed in:", user);
@@ -25,15 +26,17 @@ const privateWatchlistsPage = () => {
     }
 
     fetchUserData;
-//UNCOMMENT THIS
-    // const displayName = user.displayName;
-    // const username = displayName.replace(/\s/g, '')
 
     // // add back when user has profile image option
     // const image = user.profileImage;
 
     const image = "/public/images/cinnamoroll.png";
     const colorPalette = ["#ffb3ba", "#ffdfba", "#ffffba", "#baffc9", "#bae1ff"];
+
+    const deleteWatchlist = async() => {
+        // const collectionRef = collection(db, "watchlists");
+        // await deleteDoc(collectionRef, watchlist.id)
+    }
 
     const handleDeleteItem = async (items: any) => {
         const docRef = doc(db, "watchlists", items.idx)
@@ -110,9 +113,9 @@ const privateWatchlistsPage = () => {
                             />
                             <div className={styles.handle}>
                                 {/* name */}
-                                <p>notalyssa</p>
+                                <p>{user?.displayName?.replaceAll(" ", "")}</p>
                                 {/* username */}
-                                <p>@notalyssa</p>
+                                <p>@{user?.displayName?.replaceAll(" ", "")}</p>
                             </div>
                         </div>
                     </div>
@@ -147,7 +150,7 @@ const privateWatchlistsPage = () => {
                                             height={50}
                                             alt=''
                                         />
-                                    <a href="/notalyssa">@notalyssa</a>
+                                    <a href={`/${user?.displayName?.replaceAll(" ", "")}`}>@{user?.displayName?.replaceAll(" ", "")}</a>
                                     </div>
                                     <div className={styles.watchlistDescription}>
                                         <p>{watchlist.private ? "Private" : "Public"}</p>
@@ -159,8 +162,8 @@ const privateWatchlistsPage = () => {
                                     <h1 className={styles.watchlistTitle}>{watchlist.title}</h1>
                                     {/* map watchlist.items */}
                                     <ul className={styles.items}>
-                                        {Array.isArray(watchlist.items) && watchlist.items.map((item: string, idx: number) =>
-                                            <li key={idx}>
+                                        {Array.isArray(watchlist.items) && watchlist.items.map((item: any) =>
+                                            <li key={item.idx}>
                                                 {item}
                                                 {/* <a onClick={handleDeleteItem}> X</a> */}
                                             </li>
@@ -169,8 +172,8 @@ const privateWatchlistsPage = () => {
                                     <button className={styles.addNewItem}>Add New Item</button>
                                     <div className={styles.tags}>
                                         <p>Tags:</p>
-                                        {Array.isArray(watchlist.tags) && watchlist.tags.map((item: string, idx: number) =>
-                                            <a key={idx}>#{item}</a>
+                                        {Array.isArray(watchlist.tags) && watchlist.tags.map((tag: any) =>
+                                            <a key={tag.idx}>#{tag}</a>
                                         )}
                                     </div>
                                 </div>
@@ -179,7 +182,7 @@ const privateWatchlistsPage = () => {
 
                                     <MdEdit className={styles.edit} onClick={handleEdit}/>
 
-                                    <FaTrash className={styles.delete} onClick={() => onDelete(watchlist.id)}/>
+                                    <FaTrash className={styles.delete} onClick={deleteWatchlist}/>
                                 </div>
                             </div>
                         </div>
@@ -217,14 +220,14 @@ const privateWatchlistsPage = () => {
                                     <h1 className={styles.watchlistTitle}>{watchlist.title}</h1>
                                     {/* map watchlist.items */}
                                     <ul className={styles.items}>
-                                        {Array.isArray(watchlist.items) && watchlist.items.map((item: any, idx: number) =>
-                                            <li key={idx}>{item}</li>
+                                        {Array.isArray(watchlist.items) && watchlist.items.map((item: any) =>
+                                            <li key={item.id}>{item}</li>
                                         )}
                                     </ul>
                                     <div className={styles.tags}>
                                         <p>Tags:</p>
-                                        {Array.isArray(watchlist.tags) && watchlist.tags.map((item: any, idx: number) =>
-                                            <a key={idx}>#{item}</a>
+                                        {Array.isArray(watchlist.tags) && watchlist.tags.map((tag: any) =>
+                                            <a key={tag.idx}>#{tag}</a>
                                         )}
                                     </div>
                                 </div>

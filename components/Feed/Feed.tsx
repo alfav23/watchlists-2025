@@ -54,7 +54,7 @@ export const Feed = () => {
             </div>
             <div className={styles.feedFooter}>
                 <Link 
-                    href='/create-watchlist'
+                    href='/createWatchlist'
                     className={styles.createWatchlist}>
                         <MdAddBox 
                             style={

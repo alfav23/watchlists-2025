@@ -37,7 +37,7 @@ const WatchlistForm = () => {
 
         const collectionRef = collection(db, "watchlists");
         const newWatchlistData = {
-            creatorID: user ? user.uid : null,
+            creatorID: user ? user.displayName : null,
             title: title,
             genre: genre,
             items: items,
@@ -88,11 +88,11 @@ const WatchlistForm = () => {
                             <p>Add at least one movie or show to publish your list!</p>
                         ) : (
                         items.map((item) => (
-                            <li key={item.indexOf(item)} className={styles.item}>
+                            <li key={Math.random()} className={styles.item}> {item}
                             </li>
                         )))}
                     </ul>
-                    <form className={styles.addItemForm} onSubmit={handleAddShow}>
+                    <div className={styles.addItemSection}>
                         <input 
                             value={item} 
                             type="text" 
@@ -101,11 +101,12 @@ const WatchlistForm = () => {
                         />
                         <button  
                             type="submit"
+                            onSubmit={handleAddShow}
                             className={styles.addShowButton}
                         >
                             Add movie or show to your list!
                         </button>
-                    </form>
+                    </div>
                 </div>
                 <div className={styles.addTagSection}>
                     <ul className={styles.tagsList}>
@@ -113,26 +114,28 @@ const WatchlistForm = () => {
                             <p>Add some tags so people can find your list!</p>
                         ) : (
                         tags.map((tag) => (
-                            <li key={tag.indexOf(tag)} className={styles.tag}>
+                            <li key={Math.random()} className={styles.tag}>{tag}
                             </li>
                         )))}
                     </ul>
-                    <form className={styles.addTagForm} onSubmit={handleAddTag}>
+                    <div>
                         <input 
                             value={tag} 
                             type="text"
                             placeholder="Enter a tag"
                             onChange={(e) => setTag(e.target.value)}
                         />
-                        <button  
+                        <button 
+                            type="submit"
+                            onSubmit={handleAddTag} 
                             className={styles.addTagButton}
                         >
                             Add tags
                         </button>
-                    </form>
+                    </div>
                 </div>
                 <p>Public lists will appear on the public feed.</p>
-                <p>{`Private lists will only be visible to you${user ? `, ${user.displayName || user.email}` : '' }!`}</p>
+                <p>{`Private lists will only be visible to you${user ? `, ${user.displayName || user.email?.replaceAll(" ", "")}` : '' }!`}</p>
                 <select 
                     name="status-setting" 
                     id="status-setting"
