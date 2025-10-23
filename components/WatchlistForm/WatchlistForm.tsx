@@ -2,7 +2,7 @@
 import styles from "./WatchlistForm.module.scss";
 import { getAuth } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { collection, addDoc, writeBatch, doc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebaseConfig";
 import { useState } from "react";
 
@@ -20,18 +20,16 @@ const WatchlistForm = () => {
     const [ title, setTitle ] = useState<string>("");
     const [ isPrivate, setIsPrivate ] = useState<boolean>(true);
 
-    const handleAddShow = (e?: React.FormEvent) => {
-        e?.preventDefault();
-        if (!item) return;
-        setItems(prev => [...prev, item]);
-        setItem("");
+    const handleAddShow = () => {
+        items.push(item);
+        setItems(items);
+        console.log("Show added:", item, "to list:", items)
     }
 
-    const handleAddTag = (e?: React.FormEvent) => {
-        e?.preventDefault();
-        if (!tag) return;
-        setTags(prev => [...prev, tag]);
-        setTag("");
+    const handleAddTag = async () => {
+        tags.push(tag);
+        setTags(tags);
+        console.log("Show added:", tag, "to list:", tags)
     }
 
     const pushList = async(event: React.FormEvent) => {
@@ -57,30 +55,6 @@ const WatchlistForm = () => {
         try {
             const docRef = await addDoc(collectionRef, newWatchlistData);
             console.log("Successfully added watchlist with ID:", docRef.id);
-
-            // create subcollection documents for items and tags
-            const itemsCol = collection(db, 'watchlists', docRef.id, 'items');
-            const tagsCol = collection(db, 'watchlists', docRef.id, 'tags');
-
-            const batch = writeBatch(db);
-
-            // add items as separate documents
-            items.forEach((it) => {
-                const itemRef = doc(itemsCol);
-                batch.set(itemRef, { text: it, createdAt: serverTimestamp() });
-            });
-
-            // add tags as separate documents
-            tags.forEach((t) => {
-                const tagRef = doc(tagsCol);
-                batch.set(tagRef, { name: t, createdAt: serverTimestamp() });
-            });
-
-            // commit batch if there are writes
-            if (items.length > 0 || tags.length > 0) {
-                await batch.commit();
-            }
-
         } catch(e) {
             console.error("Error adding watchlist:", e);
         }
