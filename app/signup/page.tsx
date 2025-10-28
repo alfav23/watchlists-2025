@@ -1,7 +1,6 @@
 'use client';
 // will use state and hooks
 import styles from "./Signup.module.scss";
-import { PiXLogoBold } from "react-icons/pi";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link"
