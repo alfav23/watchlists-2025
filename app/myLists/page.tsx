@@ -4,28 +4,17 @@ import { db } from "@/lib/firebaseConfig";
 import { collection, deleteDoc, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Image from 'next/image';
-import { FaSearch, FaTrash } from "react-icons/fa";
-import onDelete from "../../components/Watchlist";
+import { FaSearch, FaTrash } from "react-icons/fa"; 
 import { MdEdit } from 'react-icons/md';
 import { FaEye } from 'react-icons/fa6';
-import { getAuth, onAuthStateChanged} from 'firebase/auth';
+import { getAuth} from 'firebase/auth';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const privateWatchlistsPage = () => {
     const auth = getAuth();
     const user = auth.currentUser;
-    const fetchUserData = async() => {
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                console.log("User is signed in:", user);
-            } else {
-                console.log("User is signed out.");    
-            }
-            
-        });
-    }
-
-    fetchUserData;
+    const router = useRouter;
 
     // // add back when user has profile image option
     // const image = user.profileImage;
@@ -33,23 +22,25 @@ const privateWatchlistsPage = () => {
     const image = "/public/images/cinnamoroll.png";
     const colorPalette = ["#ffb3ba", "#ffdfba", "#ffffba", "#baffc9", "#bae1ff"];
 
-    const deleteWatchlist = async() => {
-        // const collectionRef = collection(db, "watchlists");
-        // await deleteDoc(collectionRef, watchlist.id)
+    const deleteWatchlist = async(watchlist: any) => {
+        
+        const docRef = doc(db, "watchlists", watchlist.id);
+        try {
+            await deleteDoc(docRef);
+            console.log("Successfully deleted document:", watchlist.id);
+        } catch (error) {
+            console.error("Error deleting document:", error)
+        }
     }
 
     const handleDeleteItem = async (items: any) => {
-        const docRef = doc(db, "watchlists", items.idx)
+        const docRef = doc(db, "watchlists", items.id)
         await deleteDoc(docRef);
         console.log("Item successfully deleted");
     }
 
     const handleEdit = () => {
         // <EditForm /> 
-    }
-
-    const handleSubmitEdit = async () => {
-
     }
 
     const handleMakePublic = async (watchlist: any) => {
@@ -91,9 +82,8 @@ const privateWatchlistsPage = () => {
 
     return (
         <div className={styles.mainContent}>
-            {/* <h1>{username}'s watchlists</h1> */}
             <div className={styles.headerContainer}>
-                <h1>notalyssa's watchlists</h1>
+                <h1>{user?.displayName?.replaceAll(" ", "")}'s watchlists</h1>
             </div>
             <div>
                 <div className={styles.profileBarContainer}>
@@ -126,12 +116,13 @@ const privateWatchlistsPage = () => {
                         / 
                         <Link href="/profile-settings">Profile Settings</Link>
                         / 
-                        <a onClick={() => {}} href="#watchlist-form">Create New Watchlist</a>
+                        <a onClick={() => {}} href="watchlist-form">Create New Watchlist</a>
                         / 
-                        <a onClick={() => {}} href="#review-form">Write a Review</a>
+                        <a onClick={() => {}} href="review-form">Write a Review</a>
                     </div>
                 </div>
             </div>
+            <h2>Private Lists:</h2>
             <div className={styles.privateListsFeed}>
                 {privateWatchlists.length === 0 ? (
                     <p>Nothing to see here!</p>
@@ -162,19 +153,19 @@ const privateWatchlistsPage = () => {
                                     <h1 className={styles.watchlistTitle}>{watchlist.title}</h1>
                                     {/* map watchlist.items */}
                                     <ul className={styles.items}>
-                                        {Array.isArray(watchlist.items) && watchlist.items.map((item: any) =>
-                                            <li key={item.idx}>
+                                        {Array.isArray(watchlist.items) && watchlist.items.map((item: string, idx: number) => (
+                                            <li key={`${watchlist.id}-item-${idx}`}>
                                                 {item}
-                                                {/* <a onClick={handleDeleteItem}> X</a> */}
+                                                <a onClick={() => handleDeleteItem(watchlist)}> X</a>
                                             </li>
-                                        )}
+                                        ))}
                                     </ul>
                                     <button className={styles.addNewItem}>Add New Item</button>
                                     <div className={styles.tags}>
                                         <p>Tags:</p>
-                                        {Array.isArray(watchlist.tags) && watchlist.tags.map((tag: any) =>
-                                            <a key={tag.idx}>#{tag}</a>
-                                        )}
+                                        {Array.isArray(watchlist.tags) && watchlist.tags.map((tag: string, idx: number) => (
+                                            <a key={`${watchlist.id}-tag-${idx}`}>#{tag}</a>
+                                        ))}
                                     </div>
                                 </div>
                                 <div className={styles.actions}>
@@ -182,7 +173,7 @@ const privateWatchlistsPage = () => {
 
                                     <MdEdit className={styles.edit} onClick={handleEdit}/>
 
-                                    <FaTrash className={styles.delete} onClick={deleteWatchlist}/>
+                                    <FaTrash className={styles.delete} onClick={() => deleteWatchlist(watchlist)}/>
                                 </div>
                             </div>
                         </div>
@@ -190,10 +181,12 @@ const privateWatchlistsPage = () => {
                 )}
             </div>
             {/* favorited/starred watchlists */}
+            <h2>Saved Lists:</h2>
             <div className={styles.savedListsFeed}>
                 {savedWatchlists.length === 0 ? (
                     <p>Nothing to see here!</p>
                 ) : (
+                    
                     savedWatchlists.map((watchlist) => (
                         <div key={watchlist.id} className={styles.watchlistContainer}>
                             <div style={{backgroundColor: `${colorPalette[Math.floor(Math.random()*(4 - 0 + 1) + 0)]}`}} className={styles.watchlist}>
@@ -220,15 +213,15 @@ const privateWatchlistsPage = () => {
                                     <h1 className={styles.watchlistTitle}>{watchlist.title}</h1>
                                     {/* map watchlist.items */}
                                     <ul className={styles.items}>
-                                        {Array.isArray(watchlist.items) && watchlist.items.map((item: any) =>
-                                            <li key={item.id}>{item}</li>
-                                        )}
+                                        {Array.isArray(watchlist.items) && watchlist.items.map((item: any, idx: number) => (
+                                            <li key={`${watchlist.id}-saved-item-${idx}`}>{item}</li>
+                                        ))}
                                     </ul>
                                     <div className={styles.tags}>
                                         <p>Tags:</p>
-                                        {Array.isArray(watchlist.tags) && watchlist.tags.map((tag: any) =>
-                                            <a key={tag.idx}>#{tag}</a>
-                                        )}
+                                        {Array.isArray(watchlist.tags) && watchlist.tags.map((tag: any, idx: number) => (
+                                            <a key={`${watchlist.id}-tag-${idx}`}>#{tag}</a>
+                                        ))}
                                     </div>
                                 </div>
                                 <div className={styles.actions}>
@@ -244,3 +237,7 @@ const privateWatchlistsPage = () => {
 }
 
 export default privateWatchlistsPage;
+
+function updateUserData() {
+    throw new Error('Function not implemented.');
+}
