@@ -14,13 +14,15 @@ import { useRouter } from 'next/navigation';
 const privateWatchlistsPage = () => {
     const auth = getAuth();
     const user = auth.currentUser;
-    const router = useRouter;
+    const router = useRouter();
 
     // // add back when user has profile image option
     // const image = user.profileImage;
 
     const image = "/public/images/cinnamoroll.png";
     const colorPalette = ["#ffb3ba", "#ffdfba", "#ffffba", "#baffc9", "#bae1ff"];
+
+    const [ items, setItems ] = useState<Record<string, string>>({})
 
     const deleteWatchlist = async(watchlist: any) => {
         
@@ -37,6 +39,30 @@ const privateWatchlistsPage = () => {
         const docRef = doc(db, "watchlists", items.id)
         await deleteDoc(docRef);
         console.log("Item successfully deleted");
+    }
+
+    const addShow = async (watchlist: any) => {
+        if (!watchlist?.id) {
+            console.warn('addShow called without a watchlist');
+            return;
+        }
+        const value = (items[watchlist.id] || '').trim();
+        if (!value) {
+            // nothing to add
+            return;
+        }
+
+        const docRef = doc(db, "watchlists", watchlist.id);
+        const newItems = [ ...(watchlist.items || []), value ];
+        try {
+            await updateDoc(docRef, {
+                items: newItems,
+            });
+            // clear only this watchlist's input after successful add
+            setItems(prev => ({ ...prev, [watchlist.id]: '' }));
+        } catch (error) {
+            console.log("Unable to add show", error)
+        } 
     }
 
     const handleEdit = () => {
@@ -160,7 +186,13 @@ const privateWatchlistsPage = () => {
                                             </li>
                                         ))}
                                     </ul>
-                                    <button className={styles.addNewItem}>Add New Item</button>
+                                    <input 
+                                        type="text"
+                                        placeholder='movie or show'
+                                        value={items[watchlist.id] || ''}
+                                        onChange={(e) => setItems(prev => ({ ...prev, [watchlist.id]: e.target.value }))} 
+                                    />
+                                    <button onClick={() => addShow(watchlist)} className={styles.addNewItem}>Add New Item</button>
                                     <div className={styles.tags}>
                                         <p>Tags:</p>
                                         {Array.isArray(watchlist.tags) && watchlist.tags.map((tag: string, idx: number) => (
