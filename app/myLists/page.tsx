@@ -35,10 +35,19 @@ const privateWatchlistsPage = () => {
         }
     }
 
-    const handleDeleteItem = async (items: any) => {
-        const docRef = doc(db, "watchlists", items.id)
-        await deleteDoc(docRef);
-        console.log("Item successfully deleted");
+    const handleDeleteItem = async (watchlist: any, item: any) => {
+        const docRef = doc(db, "watchlists", watchlist.id);
+        const items = [...watchlist.items];
+        const updatedItems = items.filter((i) => i !== item);
+        try {
+            await updateDoc(docRef, {
+                items: updatedItems
+            });
+            console.log("Item successfully deleted:", item);
+        } catch (error) {
+            console.log("Unable to delete item", error);
+        }
+        
     }
 
     const addShow = async (watchlist: any) => {
@@ -46,14 +55,14 @@ const privateWatchlistsPage = () => {
             console.warn('addShow called without a watchlist');
             return;
         }
-        const value = (items[watchlist.id] || '').trim();
-        if (!value) {
+        const item = (items[watchlist.id] || '').trim();
+        if (!item) {
             // nothing to add
             return;
         }
 
         const docRef = doc(db, "watchlists", watchlist.id);
-        const newItems = [ ...(watchlist.items || []), value ];
+        const newItems = [ ...(watchlist.items || []), item ];
         try {
             await updateDoc(docRef, {
                 items: newItems,
@@ -71,7 +80,7 @@ const privateWatchlistsPage = () => {
 
     const handleMakePublic = async (watchlist: any) => {
         try {
-            const docRef = doc(db, "watchlists", watchlist);
+            const docRef = doc(db, "watchlists", watchlist.id);
             await updateDoc(docRef, {
                 private: false
             });
@@ -182,7 +191,7 @@ const privateWatchlistsPage = () => {
                                         {Array.isArray(watchlist.items) && watchlist.items.map((item: string, idx: number) => (
                                             <li key={`${watchlist.id}-item-${idx}`}>
                                                 {item}
-                                                <a onClick={() => handleDeleteItem(watchlist)}> X</a>
+                                                <a onClick={() => handleDeleteItem(watchlist, item)}> X</a>
                                             </li>
                                         ))}
                                     </ul>
@@ -201,9 +210,9 @@ const privateWatchlistsPage = () => {
                                     </div>
                                 </div>
                                 <div className={styles.actions}>
-                                    <FaEye className={styles.makePublic} onClick={handleMakePublic}/>
+                                    <FaEye className={styles.makePublic} onClick={()  => handleMakePublic(watchlist)}/>
 
-                                    <MdEdit className={styles.edit} onClick={handleEdit}/>
+                                    <MdEdit className={styles.edit} onClick={() => handleEdit()}/>
 
                                     <FaTrash className={styles.delete} onClick={() => deleteWatchlist(watchlist)}/>
                                 </div>
@@ -269,7 +278,3 @@ const privateWatchlistsPage = () => {
 }
 
 export default privateWatchlistsPage;
-
-function updateUserData() {
-    throw new Error('Function not implemented.');
-}
