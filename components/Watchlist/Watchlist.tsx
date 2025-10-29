@@ -54,51 +54,52 @@ export default function Watchlist({
             status = "Public"
         }
 
-        const handleSave = async () => {
+        const handleSave = async (watchlist: any) => {
             const newSaveCount = saveCount + 1;
             setIsSaved(!isSaved);
             setSaveCount(newSaveCount);
             setStarDisplay((prevStarDisplay) => !prevStarDisplay);
 
             try{
-                const watchlistRef = doc(db, "watchlists", watchlistId);
+                const watchlistRef = doc(db, "watchlists", watchlist.id);
                 await updateDoc(watchlistRef, {
                     saves: newSaveCount,
+                    favorited: true
                 });
-                console.log(watchlistId, "saves:", newSaveCount);
+                console.log(watchlist.title, "has", newSaveCount, "saves! Watchlist is saved to your lists!");
             } catch(error){
                 console.error("Failed to update save count", error);
             }
         };
 
-        const handleLike = async() => {
+        const handleLike = async(watchlist: any) => {
             const newLikeCount = likeCount + 1;
             setIsLiked(!isLiked);
             setLikeCount(newLikeCount);
             setHeartDisplay((prevHeartDisplay) => !prevHeartDisplay);
 
             try{
-                const watchlistRef = doc(db, "watchlists", watchlistId);
+                const watchlistRef = doc(db, "watchlists", watchlist.id);
                 await updateDoc(watchlistRef, {
                     likes: newLikeCount,
                 });
-                console.log(watchlistId, "likes:", newLikeCount);
+                console.log(watchlist.title, "now has", newLikeCount, "likes!");
             } catch(error){
                 console.error("Failed to update like count", error);
             }
         };
 
-        const handleCommentSubmit = async() => {
+        const handleCommentSubmit = async(watchlist: any) => {
         
             const newCommentCount = commentCount + 1;
             setCommentCount(newCommentCount);
 
             try {
-                const watchlistRef = doc(db, "watchlists", watchlistId);
+                const watchlistRef = doc(db, "watchlists", watchlist.id);
                 await updateDoc(watchlistRef, {
                     comments: newCommentCount,
                 });
-                    console.log(watchlistId, "comments:", newCommentCount);
+                    console.log(watchlist.title, "comments:", newCommentCount);
                 } catch (error) {
                     console.error("Failed to update comment count", error);
                 }
@@ -107,13 +108,7 @@ export default function Watchlist({
 
         const handleCommentClick = async () => {
             console.log("Leave a comment");
-            return (
-                <div className={styles.commentFormContainer}>
-                    <form onSubmit={handleCommentSubmit}>
-                        <CommentForm/>
-                    </form>
-                </div>
-            )
+            router.push("/commentForm")
             
         };
 
@@ -189,15 +184,15 @@ export default function Watchlist({
                             </div>
                         </div>
                         <div className={styles.reactions}>
-                            <CiStar className={styles.favorite} onClick={handleSave}/>
+                            <CiStar className={styles.favorite} onClick={() => handleSave(watchlist)}/>
                             <FaStar style={{ display: starDisplay ? "flex" : "none" }} className={styles.userFavorited}/>
-                            <span>{saves}</span>
+                            <span>{watchlist.saves}</span>
 
-                            <CiHeart className={styles.like} onClick={handleLike}/>
+                            <CiHeart className={styles.like} onClick={() => handleLike(watchlist)}/>
                             <IoMdHeart style={{ display: heartDisplay ? "flex" : "none" }} className={styles.userLiked}/>
-                            <span>{likes}</span>
+                            <span>{watchlist.likes}</span>
 
-                            <TfiComment className={styles.comment} onClick={handleCommentClick}/>
+                            <TfiComment className={styles.comment} onClick={() => handleCommentClick}/>
                             <span>{comments}</span>
                         </div>
                     </div>

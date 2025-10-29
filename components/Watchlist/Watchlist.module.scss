@@ -1,12 +1,14 @@
 .watchlistContainer {
     display: flex;
+    margin-bottom: 3rem;
+    margin-top: 3rem;
 }
 
 .watchlist {
     display: flex;
     width: 100%;
     max-width: 400px;
-    max-height: 150px;
+    height: 150px;
     border: 1px solid black;
     border-radius: 6px;
     // background-color: #ffffba;
@@ -129,7 +131,7 @@
 
     .userFavorited {
         position: absolute;
-        top: 0.36rem;
+        top: 0.5rem;
         font-size: 26px;
         color: 	#ffffba;
         display: none;

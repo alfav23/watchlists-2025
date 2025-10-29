@@ -5,17 +5,32 @@
     padding: 20px;
     // border-radius: 6px;
     border-left: 1px solid black;
-    overflow-y: scroll;
+    max-height: 100vh;
 }
 
-.watchlistsContainer {
+.watchlistsContainer { 
+    position: relative;
+    max-height: 100vh;
+    overflow-y: scroll;
     display: flex;
     justify-content: center;
+    margin-top: 5rem;
+    margin-bottom: 5rem;
 }
 
 .watchlist {
-    list-style: none;
-    margin-bottom: 20%;
+  list-style: none;
+}
+
+.feedTitle {
+  position: absolute;
+  left: 0;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  background-color: white;
+  width: 100%;
+  z-index: 2;
 }
 
 .feedFooter {
@@ -27,6 +42,7 @@
   position: absolute;
   left: 0;
   bottom: 0;
+  z-index: 2;
 }
 
 .createWatchlist {
