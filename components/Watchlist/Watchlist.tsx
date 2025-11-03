@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { IoMdHeart } from "react-icons/io";
 import { FaStar } from "react-icons/fa6";
 import CommentForm  from "../CommentForm";
+import { reload } from 'firebase/auth';
 // import { getAuth } from 'firebase/auth';
 
 interface WatchlistProps {
@@ -36,12 +37,10 @@ export default function Watchlist({
     comments
 }: WatchlistProps) {
     const router = useRouter();
-    const [ heartDisplay, setHeartDisplay ] = useState(false);
-    const [ starDisplay, setStarDisplay ] = useState(false);
+    const [ likedWatchlists, setLikedWatchlists ] = useState<{[key: string]: boolean}>({});
+    const [ savedWatchlists, setSavedWatchlists ] = useState<{[key: string]: boolean}>({});
     const [ saveCount, setSaveCount ] = useState(saves || 0);
-    const [ isSaved, setIsSaved ] = useState(false);
     const [ likeCount, setLikeCount ] = useState(likes || 0);
-    const [ isLiked, setIsLiked ] = useState(false);
     const [ commentCount, setCommentCount ] = useState(comments || 0);
     const image = "/public/images/cinnamoroll.png";
     const colorPalette = ["#ffb3ba", "#ffdfba", "#ffffba", "#baffc9", "#bae1ff"];
@@ -55,36 +54,48 @@ export default function Watchlist({
         }
 
         const handleSave = async (watchlist: any) => {
-            const newSaveCount = saveCount + 1;
-            setIsSaved(!isSaved);
-            setSaveCount(newSaveCount);
-            setStarDisplay((prevStarDisplay) => !prevStarDisplay);
-
-            try{
+            const isSaved = savedWatchlists[watchlist.id];
+            const newSaveCount = isSaved ? watchlist.saves - 1 : watchlist.saves + 1;
+            
+            try {
                 const watchlistRef = doc(db, "watchlists", watchlist.id);
                 await updateDoc(watchlistRef, {
                     saves: newSaveCount,
-                    favorited: true
+                    favorited: !isSaved
                 });
+                
+                setSavedWatchlists(prev => ({
+                    ...prev,
+                    [watchlist.id]: !isSaved
+                }));
+                
+                // Fetch latest data
+                await fetchPublicWatchlists();
                 console.log(watchlist.title, "has", newSaveCount, "saves! Watchlist is saved to your lists!");
-            } catch(error){
+            } catch(error) {
                 console.error("Failed to update save count", error);
             }
         };
 
         const handleLike = async(watchlist: any) => {
-            const newLikeCount = likeCount + 1;
-            setIsLiked(!isLiked);
-            setLikeCount(newLikeCount);
-            setHeartDisplay((prevHeartDisplay) => !prevHeartDisplay);
-
-            try{
+            const isLiked = likedWatchlists[watchlist.id];
+            const newLikeCount = isLiked ? watchlist.likes - 1 : watchlist.likes + 1;
+            
+            try {
                 const watchlistRef = doc(db, "watchlists", watchlist.id);
                 await updateDoc(watchlistRef, {
                     likes: newLikeCount,
                 });
+                
+                setLikedWatchlists(prev => ({
+                    ...prev,
+                    [watchlist.id]: !isLiked
+                }));
+                
+                // Fetch latest data
+                await fetchPublicWatchlists();
                 console.log(watchlist.title, "now has", newLikeCount, "likes!");
-            } catch(error){
+            } catch(error) {
                 console.error("Failed to update like count", error);
             }
         };
@@ -106,9 +117,9 @@ export default function Watchlist({
 
             };
 
-        const handleCommentClick = async () => {
+        const handleCommentClick = async (watchlist: any) => {
             console.log("Leave a comment");
-            router.push("/commentForm")
+            router.push(`/commentForm/${watchlist.id}`);
             
         };
 
@@ -121,12 +132,13 @@ export default function Watchlist({
     const q = query(watchlists, where("private", "==", false));
     const [publicWatchlists, setPublicWatchlists] = useState<any[]>([]);
 
+    const fetchPublicWatchlists = async () => {
+        const querySnapshot = await getDocs(q);
+        const lists = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setPublicWatchlists(lists);
+    };
+
     useEffect(() => {
-        const fetchPublicWatchlists = async () => {
-            const querySnapshot = await getDocs(q);
-            const lists = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            setPublicWatchlists(lists);
-        };
         fetchPublicWatchlists();
     }, []);
 
@@ -184,15 +196,23 @@ export default function Watchlist({
                             </div>
                         </div>
                         <div className={styles.reactions}>
-                            <CiStar className={styles.favorite} onClick={() => handleSave(watchlist)}/>
-                            <FaStar style={{ display: starDisplay ? "flex" : "none" }} className={styles.userFavorited}/>
+                            <CiStar key={`${watchlist.id}-star`} className={styles.favorite} onClick={() => handleSave(watchlist)}/>
+                            <FaStar 
+                                key={`${watchlist.id}-starred`}  
+                                style={{ display: savedWatchlists[watchlist.id] ? "flex" : "none" }} 
+                                className={styles.userFavorited}
+                            />
                             <span>{watchlist.saves}</span>
 
-                            <CiHeart className={styles.like} onClick={() => handleLike(watchlist)}/>
-                            <IoMdHeart style={{ display: heartDisplay ? "flex" : "none" }} className={styles.userLiked}/>
+                            <CiHeart key={`${watchlist.id}-heart`}  className={styles.like} onClick={() => handleLike(watchlist)}/>
+                            <IoMdHeart 
+                                key={`${watchlist.id}-hearted`}  
+                                style={{ display: likedWatchlists[watchlist.id] ? "flex" : "none" }} 
+                                className={styles.userLiked}
+                            />
                             <span>{watchlist.likes}</span>
 
-                            <TfiComment className={styles.comment} onClick={() => handleCommentClick}/>
+                            <TfiComment key={`${watchlist.id}-comment`}  className={styles.comment} onClick={() => handleCommentClick(watchlist)}/>
                             <span>{comments}</span>
                         </div>
                     </div>
