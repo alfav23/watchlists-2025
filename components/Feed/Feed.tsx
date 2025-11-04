@@ -45,9 +45,6 @@ export const Feed = () => {
                             saves={0}
                             likes={0}
                             comments={0}
-                            onDelete={(watchlistId) => {
-                            watchlistId = "";
-                            }}
                         />
                     </li>
                 </ul>

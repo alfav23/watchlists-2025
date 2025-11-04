@@ -49,7 +49,8 @@ const WatchlistForm = () => {
                 commentCount: 0,
                 comments: [""]
             },
-            favorited: false
+            favorited: false,
+            // profilePic: user?.profilePicURL
         }
 
         try {

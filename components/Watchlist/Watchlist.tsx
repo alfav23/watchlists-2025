@@ -5,12 +5,11 @@ import Image from "next/image";
 import { CiStar, CiHeart } from 'react-icons/ci';
 import { TfiComment } from "react-icons/tfi";
 import { db } from "../../lib/firebaseConfig";
-import { doc, updateDoc, collection, query, getDocs, setDoc, where } from 'firebase/firestore';
+import { doc, updateDoc, collection, query, getDocs, where, getDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { IoMdHeart } from "react-icons/io";
 import { FaStar } from "react-icons/fa6";
 import CommentForm  from "../CommentForm";
-import { reload } from 'firebase/auth';
 // import { getAuth } from 'firebase/auth';
 
 interface WatchlistProps {
@@ -26,32 +25,44 @@ interface WatchlistProps {
     saves: number;
     likes: number;
     comments: number;
-    onDelete: (watchlistId: string) => void;
 }
 
 export default function Watchlist({
     isPrivate,
-    watchlistId,
-    saves,
-    likes,
     comments
 }: WatchlistProps) {
     const router = useRouter();
     const [ likedWatchlists, setLikedWatchlists ] = useState<{[key: string]: boolean}>({});
     const [ savedWatchlists, setSavedWatchlists ] = useState<{[key: string]: boolean}>({});
-    const [ saveCount, setSaveCount ] = useState(saves || 0);
-    const [ likeCount, setLikeCount ] = useState(likes || 0);
     const [ commentCount, setCommentCount ] = useState(comments || 0);
-    const image = "/public/images/cinnamoroll.png";
     const colorPalette = ["#ffb3ba", "#ffdfba", "#ffffba", "#baffc9", "#bae1ff"];
+    const profilePicURL = "https://picsum.photos/50";
     
-        let status = ""
+        let status = "";
 
         if (isPrivate !== false) {
             status = "Private"
         } else {
             status = "Public"
         }
+
+        const getProfilePic = async (watchlist: any) => {
+            try {
+                const watchlistRef = doc(db, "watchlists", watchlist.id);
+                const watchlistSnap = await getDoc(watchlistRef);
+                const watchlistData = watchlistSnap.data();
+                const creator = watchlistData?.creatorID;
+                if (!creator) return null;
+
+                const creatorRef = doc(db, "users", creator);
+                const creatorSnap = await getDoc(creatorRef);
+                const creatorData = creatorSnap.data();
+                return JSON.stringify(creatorData?.profilePicURL)  || null;
+            } catch (error) {
+                console.error("Failed to fetch profile pic", error);
+                return null;
+            }
+        };
 
         const handleSave = async (watchlist: any) => {
             const isSaved = savedWatchlists[watchlist.id];
@@ -123,8 +134,8 @@ export default function Watchlist({
             
         };
 
-        const handleWatchlistClick = async () => {
-            router.push(`/${watchlistId}`)
+        const handleWatchlistClick = async (watchlist: any) => {
+            router.push(`/${watchlist.id}`)
         };
 
     // filter watchlists based on public or private status
@@ -165,8 +176,7 @@ export default function Watchlist({
                                 <div className={styles.userInfo}>
                                     <Image 
                                         style={{background: `${colorPalette[Math.floor(Math.random()*(4 - 0 + 1) + 0)]}`}}
-                                        src={image}
-                                        // src={creatorID.profilePic}
+                                        src={profilePicURL}
                                         width={50}
                                         height={50}
                                         alt=''

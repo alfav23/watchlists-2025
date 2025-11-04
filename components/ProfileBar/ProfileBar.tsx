@@ -47,7 +47,7 @@ export const ProfileBar = () => {
                 <Link href='/myLists'>My Watchlists</Link>
                 <Link href="/my-reviews">My Reviews</Link>
                 <Link href="/profile-settings">Profile Settings</Link>
-                <a onClick={handleCreateWatchlist} href="/">Create New Watchlist</a>
+                <a onClick={handleCreateWatchlist} href="/createWatchlist">Create New Watchlist</a>
                 <a onClick={handleCreateReview} href="/">Write a Review</a>
             </div>
         </div>
