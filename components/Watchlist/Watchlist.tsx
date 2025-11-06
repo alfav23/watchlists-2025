@@ -18,6 +18,7 @@ interface WatchlistProps {
     watchlistId: string;
     title: string;
     tags: object;
+    tag: string;
     genre: string;
     username: string;
     items: object;
@@ -29,7 +30,12 @@ interface WatchlistProps {
 
 export default function Watchlist({
     isPrivate,
-    comments
+    comments,
+    title,
+    tags,
+    tag,
+    items,
+    item
 }: WatchlistProps) {
     const router = useRouter();
     const [ likedWatchlists, setLikedWatchlists ] = useState<{[key: string]: boolean}>({});

@@ -1,0 +1,276 @@
+body {
+    padding: 25px 2.5%;
+    // background-color: rgba(186,225,255, 0.75);
+}
+
+.headerContainer {
+    display: flex;
+    background-color: #ffb3ba;
+    align-items: center;
+    padding-left: 20px;
+    margin: 0px 0px 25px 0px;
+    border: 1px solid black;
+    box-shadow: -8px 8px 0 black;
+}
+
+.profileBarContainer {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 6px;
+    border: 1px solid black;
+    // box-shadow: -8px 8px 0 black;
+    background-color: #bae1ff;
+
+    img {
+        border-radius: 30px;
+        border: 1px solid black;
+    }
+
+    p {
+        font-size: 10px;
+    }
+
+    .profileBarInner {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 6px;
+        border: 1px solid black;
+        padding: 10px;
+    }
+
+    .userInfo {
+        display: flex;
+        align-items: flex-end;
+        gap: 10px;
+    }
+
+    .searchContainer {
+        display: flex;
+        position: relative;
+    }
+
+    .search {
+        width: 100%;
+        border-radius: 8px;
+        font-family: "PressStart2P", sans-serif;
+        font-size: 8px;
+        padding: .35rem;
+    }
+
+    .searchIcon {
+        position: absolute;
+        right: .5rem;
+        bottom: .32rem;
+        font-size: small;
+    }
+}
+
+.userOptions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 10px;
+    margin-top: 10px;
+    
+
+    a {
+        text-decoration: none;
+        color: plum
+    }
+}
+
+.editContainer {
+    border: 1px solid black;
+    border-radius: 6px;
+    padding: 80px 25px;
+    margin-bottom: 20px;
+}
+
+.watchlistContainer {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin-bottom: 20px;
+}
+
+.watchlist {
+    display: flex;
+    width: 100%;
+    // max-width: 400px;
+    max-height: 350px;
+    border: 1px solid black;
+    border-radius: 6px;
+    // background-color: #ffffba;
+    margin-right: 10px;
+    padding: 12px;
+    // box-shadow: -5px 5px 0 black;
+    // z-index: 0;
+
+    a {
+        font-size: 12px;
+        color: plum;
+        text-decoration: none;
+
+        &:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    }
+
+    .userInfo {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+        border-bottom: 1px solid black;
+        padding-bottom: 5px;
+        padding-right: 5px;
+
+        img {
+            width: 50px;
+            height: 50px;
+            border-radius: 30px;
+            border: 1px solid black;
+        }
+
+        p {
+            font-size: 8px;
+        }
+
+        a {
+            text-decoration: none;
+            font-size: 8px;
+            color: black;
+
+            &:hover{
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+.watchlistHeader {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid black;
+}
+
+.watchlistContent {
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+
+    input {
+        width: 80%;
+    }
+}
+
+.watchlistDescription {
+    font-size: 8px;
+    width: 80%;
+}
+
+.watchlistTitle {
+    font-size: 16px;
+}
+
+.items {
+    overflow-y: scroll;
+
+    li {
+        font-size: 12px;
+    }
+}
+
+.itemName {
+    font-size: 10px;
+}
+
+.tags {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    overflow-x: hidden;
+    font-size: 10px;
+    gap: .25rem;
+
+    input {
+        width: 30%;
+    }
+}
+
+.addNewItem {
+    font-family: "PressStart2P", sans-serif;
+    font-size: 12px;
+    padding: .25rem;
+    background-color: #ffb3ba;
+    border-radius: 4px;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.remove {
+    font-family: "PressStart2P", sans-serif;
+    font-size: 12px;
+    padding: .25rem;
+    background-color: #ffb3ba;
+    border-radius: 4px;
+    
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.cancel {
+     font-family: "PressStart2P", sans-serif;
+    font-size: 12px;
+    padding: .25rem;
+    background-color: #ffb3ba;
+    border-radius: 4px;
+    
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.saveChanges {
+    font-family: "PressStart2P", sans-serif;
+    font-size: 12px;
+    padding: .25rem;
+    background-color: #ffb3ba;
+    border-radius: 4px;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.actions {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+.editForm {
+    input {
+        display: flex;
+        font-family: "PressStart2P", sans-serif;
+        font-size: 10px;
+        margin-bottom: 10px;
+        padding: 10px, 0, 0, 10px;
+        background-color: transparent;
+        border: 2px, solid, rgba($color: #000000, $alpha: 0.2);
+        border-radius: 6px;
+    }
+}
+

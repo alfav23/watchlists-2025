@@ -38,6 +38,7 @@ export const Feed = () => {
                             watchlistId=""
                             title=""
                             tags={[]}
+                            tag=''
                             username=''
                             items={[]}
                             item=""

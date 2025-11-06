@@ -50,32 +50,32 @@ const privateWatchlistsPage = () => {
         
     }
 
-    const addShow = async (watchlist: any) => {
-        if (!watchlist?.id) {
-            console.warn('addShow called without a watchlist');
-            return;
-        }
-        const item = (items[watchlist.id] || '').trim();
-        if (!item) {
-            // nothing to add
-            return;
-        }
+    // const addShow = async (watchlist: any) => {
+    //     if (!watchlist?.id) {
+    //         console.warn('addShow called without a watchlist');
+    //         return;
+    //     }
+    //     const item = (items[watchlist.id] || '').trim();
+    //     if (!item) {
+    //         // nothing to add
+    //         return;
+    //     }
 
-        const docRef = doc(db, "watchlists", watchlist.id);
-        const newItems = [ ...(watchlist.items || []), item ];
-        try {
-            await updateDoc(docRef, {
-                items: newItems,
-            });
-            // clear only this watchlist's input after successful add
-            setItems(prev => ({ ...prev, [watchlist.id]: '' }));
-        } catch (error) {
-            console.log("Unable to add show", error)
-        } 
-    }
+    //     const docRef = doc(db, "watchlists", watchlist.id);
+    //     const newItems = [ ...(watchlist.items || []), item ];
+    //     try {
+    //         await updateDoc(docRef, {
+    //             items: newItems,
+    //         });
+    //         // clear only this watchlist's input after successful add
+    //         setItems(prev => ({ ...prev, [watchlist.id]: '' }));
+    //     } catch (error) {
+    //         console.log("Unable to add show", error)
+    //     } 
+    // }
 
-    const handleEdit = () => {
-        // <EditForm /> 
+    const handleEdit = (watchlist: any) => {
+        router.push(`/editPage/${watchlist.id}`)
     }
 
     const handleMakePublic = async (watchlist: any) => {
@@ -195,24 +195,24 @@ const privateWatchlistsPage = () => {
                                             </li>
                                         ))}
                                     </ul>
-                                    <input 
+                                    {/* <input 
                                         type="text"
                                         placeholder='movie or show'
                                         value={items[watchlist.id] || ''}
                                         onChange={(e) => setItems(prev => ({ ...prev, [watchlist.id]: e.target.value }))} 
                                     />
-                                    <button onClick={() => addShow(watchlist)} className={styles.addNewItem}>Add New Item</button>
+                                    <button onClick={() => addShow(watchlist)} className={styles.addNewItem}>Add New Item</button> */}
                                     <div className={styles.tags}>
                                         <p>Tags:</p>
                                         {Array.isArray(watchlist.tags) && watchlist.tags.map((tag: string, idx: number) => (
-                                            <a key={`${watchlist.id}-tag-${idx}`}>#{tag}</a>
+                                            <a key={`${watchlist.id}-tag-${idx}`}>#{tag.replaceAll(" ", "")}</a>
                                         ))}
                                     </div>
                                 </div>
                                 <div className={styles.actions}>
                                     <FaEye className={styles.makePublic} onClick={()  => handleMakePublic(watchlist)}/>
 
-                                    <MdEdit className={styles.edit} onClick={() => handleEdit()}/>
+                                    <MdEdit className={styles.edit} onClick={() => handleEdit(watchlist)}/>
 
                                     <FaTrash className={styles.delete} onClick={() => deleteWatchlist(watchlist)}/>
                                 </div>
