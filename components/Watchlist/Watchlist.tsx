@@ -5,12 +5,12 @@ import Image from "next/image";
 import { CiStar, CiHeart } from 'react-icons/ci';
 import { TfiComment } from "react-icons/tfi";
 import { db } from "../../lib/firebaseConfig";
-import { doc, updateDoc, collection, query, getDocs, where, getDoc } from 'firebase/firestore';
+import { doc, updateDoc, collection, query, getDocs, where, getDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { IoMdHeart } from "react-icons/io";
 import { FaStar } from "react-icons/fa6";
 import CommentForm  from "../CommentForm";
-// import { getAuth } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 interface WatchlistProps {
     watchlist: object;
@@ -41,6 +41,15 @@ export default function Watchlist({
     const [ likedWatchlists, setLikedWatchlists ] = useState<{[key: string]: boolean}>({});
     const [ savedWatchlists, setSavedWatchlists ] = useState<{[key: string]: boolean}>({});
     const [ commentCount, setCommentCount ] = useState(comments || 0);
+    const auth = getAuth();
+    const [currentUser, setCurrentUser] = useState(auth.currentUser);
+
+    useEffect(() => {
+        const unsub = onAuthStateChanged(auth, (u) => {
+            setCurrentUser(u);
+        });
+        return () => unsub();
+    }, [auth]);
     const colorPalette = ["#ffb3ba", "#ffdfba", "#ffffba", "#baffc9", "#bae1ff"];
     const profilePicURL = "https://picsum.photos/50";
     
@@ -71,49 +80,70 @@ export default function Watchlist({
         };
 
         const handleSave = async (watchlist: any) => {
+            if (!currentUser) {
+                console.warn('User not signed in, cannot save');
+                return;
+            }
+            const uid = currentUser.uid;
             const isSaved = savedWatchlists[watchlist.id];
-            const newSaveCount = isSaved ? watchlist.saves - 1 : watchlist.saves + 1;
-            
+
             try {
                 const watchlistRef = doc(db, "watchlists", watchlist.id);
-                await updateDoc(watchlistRef, {
-                    saves: newSaveCount,
-                    favorited: !isSaved
-                });
-                
+                if (isSaved) {
+                    // remove user from savedBy
+                    await updateDoc(watchlistRef, {
+                        savedBy: arrayRemove(uid)
+                    });
+                } else {
+                    // add user to savedBy
+                    await updateDoc(watchlistRef, {
+                        savedBy: arrayUnion(uid)
+                    });
+                }
+
                 setSavedWatchlists(prev => ({
                     ...prev,
                     [watchlist.id]: !isSaved
                 }));
-                
+
                 // Fetch latest data
                 await fetchPublicWatchlists();
-                console.log(watchlist.title, "has", newSaveCount, "saves! Watchlist is saved to your lists!");
             } catch(error) {
-                console.error("Failed to update save count", error);
+                console.error("Failed to update savedBy", error);
             }
         };
 
         const handleLike = async(watchlist: any) => {
+            if (!currentUser) {
+                console.warn('User not signed in, cannot like');
+                return;
+            }
+            const uid = currentUser.uid;
             const isLiked = likedWatchlists[watchlist.id];
-            const newLikeCount = isLiked ? watchlist.likes - 1 : watchlist.likes + 1;
-            
+
             try {
                 const watchlistRef = doc(db, "watchlists", watchlist.id);
-                await updateDoc(watchlistRef, {
-                    likes: newLikeCount,
-                });
-                
+                if (isLiked) {
+                    // remove user from likedBy
+                    await updateDoc(watchlistRef, {
+                        likedBy: arrayRemove(uid)
+                    });
+                } else {
+                    // add user to likedBy
+                    await updateDoc(watchlistRef, {
+                        likedBy: arrayUnion(uid)
+                    });
+                }
+
                 setLikedWatchlists(prev => ({
                     ...prev,
                     [watchlist.id]: !isLiked
                 }));
-                
+
                 // Fetch latest data
                 await fetchPublicWatchlists();
-                console.log(watchlist.title, "now has", newLikeCount, "likes!");
             } catch(error) {
-                console.error("Failed to update like count", error);
+                console.error("Failed to update likedBy", error);
             }
         };
 
@@ -153,11 +183,23 @@ export default function Watchlist({
         const querySnapshot = await getDocs(q);
         const lists = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setPublicWatchlists(lists);
+
+        // Set per-watchlist liked/saved state for current user
+        if (currentUser) {
+            const likedMap: {[key: string]: boolean} = {};
+            const savedMap: {[key: string]: boolean} = {};
+            lists.forEach((l: any) => {
+                likedMap[l.id] = Array.isArray(l.likedBy) ? l.likedBy.includes(currentUser.uid) : false;
+                savedMap[l.id] = Array.isArray(l.savedBy) ? l.savedBy.includes(currentUser.uid) : false;
+            });
+            setLikedWatchlists(likedMap);
+            setSavedWatchlists(savedMap);
+        }
     };
 
     useEffect(() => {
         fetchPublicWatchlists();
-    }, []);
+    }, [currentUser]);
 
     // // get profile pic from users collection
     // const users = collection(db, "users");
@@ -218,7 +260,7 @@ export default function Watchlist({
                                 style={{ display: savedWatchlists[watchlist.id] ? "flex" : "none" }} 
                                 className={styles.userFavorited}
                             />
-                            <span>{watchlist.saves}</span>
+                            <span>{Array.isArray(watchlist.savedBy) ? watchlist.savedBy.length : (watchlist.saves ?? 0)}</span>
 
                             <CiHeart key={`${watchlist.id}-heart`}  className={styles.like} onClick={() => handleLike(watchlist)}/>
                             <IoMdHeart 
@@ -226,7 +268,7 @@ export default function Watchlist({
                                 style={{ display: likedWatchlists[watchlist.id] ? "flex" : "none" }} 
                                 className={styles.userLiked}
                             />
-                            <span>{watchlist.likes}</span>
+                            <span>{Array.isArray(watchlist.likedBy) ? watchlist.likedBy.length : (watchlist.likes ?? 0)}</span>
 
                             <TfiComment key={`${watchlist.id}-comment`}  className={styles.comment} onClick={() => handleCommentClick(watchlist)}/>
                             <span>{comments}</span>
