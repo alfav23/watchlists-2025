@@ -1,7 +1,7 @@
 "use client";
 import styles from './MyLists.module.scss';
 import { db } from "@/lib/firebaseConfig";
-import { collection, deleteDoc, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { arrayRemove, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Image from 'next/image';
 import { FaSearch, FaTrash } from "react-icons/fa"; 
@@ -15,6 +15,7 @@ import { RiStarOffLine } from "react-icons/ri";
 const privateWatchlistsPage = () => {
     const auth = getAuth();
     const user = auth.currentUser;
+    const uid = user?.uid;
     const router = useRouter();
 
     // // add back when user has profile image option
@@ -51,9 +52,10 @@ const privateWatchlistsPage = () => {
     }
 
     const handleUnsave = async (watchlist: any) => {
-        const docRef = doc(db, "watchlist", watchlist.id);
+        const docRef = doc(db, "watchlists", watchlist.id);
         try {
             await updateDoc(docRef, {
+                savedBy: arrayRemove(uid),
                 favorited: false
             });
             console.log("Successfully unsaved watchlist:", watchlist.title);

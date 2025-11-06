@@ -82,6 +82,7 @@ export default function Watchlist({
         const handleSave = async (watchlist: any) => {
             if (!currentUser) {
                 console.warn('User not signed in, cannot save');
+                router.push("/signup");
                 return;
             }
             const uid = currentUser.uid;
@@ -92,12 +93,14 @@ export default function Watchlist({
                 if (isSaved) {
                     // remove user from savedBy
                     await updateDoc(watchlistRef, {
-                        savedBy: arrayRemove(uid)
+                        savedBy: arrayRemove(uid),
+                        favorited: false
                     });
                 } else {
                     // add user to savedBy
                     await updateDoc(watchlistRef, {
-                        savedBy: arrayUnion(uid)
+                        savedBy: arrayUnion(uid),
+                        favorited: true
                     });
                 }
 
