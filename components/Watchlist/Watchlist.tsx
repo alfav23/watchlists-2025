@@ -219,11 +219,11 @@ export default function Watchlist({
             ) : (
                 publicWatchlists.map((watchlist) => (
                     <div key={watchlist.id} className={styles.watchlistContainer}>
-                        <div style={{backgroundColor: `${colorPalette[Math.floor(Math.random()*(4 - 0 + 1) + 0)]}`}} className={styles.watchlist}>
+                        <div style={{backgroundColor: `${watchlist.color}`}} className={styles.watchlist}>
                             <div className={styles.watchlistHeader}>
                                 <div className={styles.userInfo}>
                                     <Image 
-                                        style={{background: `${colorPalette[Math.floor(Math.random()*(4 - 0 + 1) + 0)]}`}}
+                                        style={{background: `${watchlist.color}`}}
                                         src={profilePicURL}
                                         width={50}
                                         height={50}

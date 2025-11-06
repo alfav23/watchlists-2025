@@ -239,6 +239,16 @@ body {
             cursor: pointer;
         }
     }
+
+    .unsave {
+        padding: .25rem;
+        z-index: inherit;
+        color: black;
+
+        &:hover{
+            cursor: pointer;
+        }
+    }
 }
 
 .addNewItem {

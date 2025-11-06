@@ -10,6 +10,7 @@ const WatchlistForm = () => {
     const auth = getAuth();
     const user = auth.currentUser;
     const router = useRouter();
+    const colorPalette = ["#ffb3ba", "#ffdfba", "#ffffba", "#baffc9", "#bae1ff"];
 
     // watchlist data values
     const [ genre, setGenre ] = useState<string>("");
@@ -50,6 +51,7 @@ const WatchlistForm = () => {
                 comments: [""]
             },
             favorited: false,
+            color: colorPalette[Math.floor(Math.random()*(4 - 0 + 1) + 0)]
             // profilePic: user?.profilePicURL
         }
 

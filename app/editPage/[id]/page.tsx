@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import styles from "../editPage.module.scss";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebaseConfig";
 import { getAuth } from "firebase/auth";
@@ -10,8 +10,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaSearch } from "react-icons/fa";
 
-export default function EditPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default function EditPage() {
+  const params = useParams();
+  const id = params?.id as string | undefined;
   const router = useRouter();
   const auth = getAuth();
   const user = auth.currentUser;
@@ -32,7 +33,7 @@ export default function EditPage({ params }: { params: { id: string } }) {
     const fetchWatchlist = async () => {
       setLoading(true);
       try {
-        const ref = doc(db, "watchlists", id);
+        const ref = doc(db, "watchlists", id!);
         const snap = await getDoc(ref);
         if (!snap.exists()) {
           console.warn("Watchlist not found", id);
@@ -70,7 +71,7 @@ export default function EditPage({ params }: { params: { id: string } }) {
     e.preventDefault();
     if (!watchlist) return;
     try {
-      const ref = doc(db, "watchlists", id);
+  const ref = doc(db, "watchlists", id!);
       await updateDoc(ref, {
         title,
         genre,
@@ -134,7 +135,7 @@ export default function EditPage({ params }: { params: { id: string } }) {
       <form onSubmit={handleSave} className={styles.editForm}>
         <div className={styles.editContainer}>
           <div className={styles.watchlistContainer}>
-            <div style={{backgroundColor: `${colorPalette[Math.floor(Math.random()*(4 - 0 + 1) + 0)]}`}} className={styles.watchlist}>
+            <div style={{backgroundColor: `${watchlist.color}`}} className={styles.watchlist}>
               <div className={styles.watchlistHeader}>
                 <div className={styles.userInfo}>
                   <Image 

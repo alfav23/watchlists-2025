@@ -10,6 +10,7 @@ import { FaEye } from 'react-icons/fa6';
 import { getAuth} from 'firebase/auth';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { RiStarOffLine } from "react-icons/ri";
 
 const privateWatchlistsPage = () => {
     const auth = getAuth();
@@ -19,10 +20,9 @@ const privateWatchlistsPage = () => {
     // // add back when user has profile image option
     // const image = user.profileImage;
 
-    const image = "/public/images/cinnamoroll.png";
-    const colorPalette = ["#ffb3ba", "#ffdfba", "#ffffba", "#baffc9", "#bae1ff"];
+    const image = "https://picsum.photos/50";
 
-    const [ items, setItems ] = useState<Record<string, string>>({})
+    // const [ items, setItems ] = useState<Record<string, string>>({})
 
     const deleteWatchlist = async(watchlist: any) => {
         
@@ -48,6 +48,18 @@ const privateWatchlistsPage = () => {
             console.log("Unable to delete item", error);
         }
         
+    }
+
+    const handleUnsave = async (watchlist: any) => {
+        const docRef = doc(db, "watchlist", watchlist.id);
+        try {
+            await updateDoc(docRef, {
+                favorited: false
+            });
+            console.log("Successfully unsaved watchlist:", watchlist.title);
+        } catch(error) {
+            console.log("Could not unsave watchlist:", error)
+        }
     }
 
     // const addShow = async (watchlist: any) => {
@@ -164,12 +176,12 @@ const privateWatchlistsPage = () => {
                 ) : (
                     privateWatchlists.map((watchlist) => (
                         <div key={watchlist.id} className={styles.watchlistContainer}>
-                            <div style={{backgroundColor: `${colorPalette[Math.floor(Math.random()*(4 - 0 + 1) + 0)]}`}} className={styles.watchlist}>
+                            <div style={{backgroundColor: `${watchlist.color}`}} className={styles.watchlist}>
                                 
                                 <div className={styles.watchlistHeader}>
                                     <div className={styles.userInfo}>
                                         <Image 
-                                            style={{background: `${colorPalette[Math.floor(Math.random()*(4 - 0 + 1) + 0)]}`}}
+                                            style={{background: `${watchlist.color}`}}
                                             src={image}
                                             // src={creatorID.profilePic}
                                             width={50}
@@ -230,12 +242,12 @@ const privateWatchlistsPage = () => {
                     
                     savedWatchlists.map((watchlist) => (
                         <div key={watchlist.id} className={styles.watchlistContainer}>
-                            <div style={{backgroundColor: `${colorPalette[Math.floor(Math.random()*(4 - 0 + 1) + 0)]}`}} className={styles.watchlist}>
+                            <div style={{backgroundColor: `${watchlist.color}`}} className={styles.watchlist}>
                                 
                                 <div className={styles.watchlistHeader}>
                                     <div className={styles.userInfo}>
                                         <Image 
-                                            style={{background: `${colorPalette[Math.floor(Math.random()*(4 - 0 + 1) + 0)]}`}}
+                                            style={{background: `${watchlist.color}`}}
                                             src={image}
                                             // src={creatorID.profilePic}
                                             width={50}
@@ -266,7 +278,9 @@ const privateWatchlistsPage = () => {
                                     </div>
                                 </div>
                                 <div className={styles.actions}>
-                                    <p style={{fontSize: 8}}>Unsave Icon Here</p>
+                                    <p style={{fontSize: 28}}>
+                                        <RiStarOffLine className={styles.unsave} onClick={() => handleUnsave(watchlist)}/>
+                                    </p>
                                 </div>
                             </div>
                         </div>
