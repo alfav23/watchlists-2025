@@ -165,7 +165,7 @@ const privateWatchlistsPage = () => {
                         / 
                         <Link href="/profile-settings">Profile Settings</Link>
                         / 
-                        <a onClick={() => {}} href="watchlist-form">Create New Watchlist</a>
+                        <a onClick={() => {}} href="/createWatchlist">Create New Watchlist</a>
                         / 
                         <a onClick={() => {}} href="review-form">Write a Review</a>
                     </div>

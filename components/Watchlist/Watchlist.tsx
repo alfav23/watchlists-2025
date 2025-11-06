@@ -169,7 +169,7 @@ export default function Watchlist({
 
         const handleCommentClick = async (watchlist: any) => {
             console.log("Leave a comment");
-            router.push(`/commentForm/${watchlist.id}`);
+            router.push(`/addComment/${watchlist.id}`);
             
         };
 
