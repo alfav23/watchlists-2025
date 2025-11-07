@@ -5,6 +5,7 @@
 }
 
 .watchlist {
+    position: relative;
     display: flex;
     width: 100%;
     max-width: 400px;
@@ -174,5 +175,14 @@
 
     span {
         font-size: 10px;
+    }
+}
+
+.commentSection {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    ul {
+        list-style: none;
     }
 }

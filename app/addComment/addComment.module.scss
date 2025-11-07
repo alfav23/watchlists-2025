@@ -1,0 +1,112 @@
+body {
+    padding: 25px 2.5%;
+    // background-color: rgba(186,225,255, 0.75);
+}
+
+.headerContainer {
+    display: flex;
+    background-color: #ffb3ba;
+    align-items: center;
+    padding-left: 20px;
+    margin: 0px 0px 25px 0px;
+    border: 1px solid black;
+    box-shadow: -8px 8px 0 black;
+}
+
+.profileBarContainer {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 6px;
+    border: 1px solid black;
+    // box-shadow: -8px 8px 0 black;
+    background-color: #bae1ff;
+
+    img {
+        border-radius: 30px;
+        border: 1px solid black;
+    }
+
+    p {
+        font-size: 10px;
+    }
+
+    .profileBarInner {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 6px;
+        border: 1px solid black;
+        padding: 10px;
+    }
+
+    .userInfo {
+        display: flex;
+        align-items: flex-end;
+        gap: 10px;
+    }
+
+    .searchContainer {
+        display: flex;
+        position: relative;
+    }
+
+    .search {
+        width: 100%;
+        border-radius: 8px;
+        font-family: "PressStart2P", sans-serif;
+        font-size: 8px;
+        padding: .35rem;
+    }
+
+    .searchIcon {
+        position: absolute;
+        right: .5rem;
+        bottom: .32rem;
+        font-size: small;
+    }
+}
+
+.userOptions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 10px;
+    margin-top: 10px;
+    
+
+    a {
+        text-decoration: none;
+        color: plum
+    }
+}
+
+.commentForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    input {
+        display: flex;
+        justify-content: flex-start;
+        font-family: "PressStart2P", sans-serif;
+        width: 50%;
+        padding-bottom: 100px;
+        border-radius: 6px;
+    }
+
+    .post {
+        font-family: "PressStart2P", sans-serif;
+        border-radius: 6px;
+        padding: .5rem;
+        width: 20%;
+        background-color: plum;
+
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}

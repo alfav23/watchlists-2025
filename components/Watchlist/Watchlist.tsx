@@ -9,7 +9,6 @@ import { doc, updateDoc, collection, query, getDocs, where, getDoc, arrayUnion, 
 import { useRouter } from 'next/navigation';
 import { IoMdHeart } from "react-icons/io";
 import { FaStar } from "react-icons/fa6";
-import CommentForm  from "../CommentForm";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 interface WatchlistProps {
@@ -150,22 +149,22 @@ export default function Watchlist({
             }
         };
 
-        const handleCommentSubmit = async(watchlist: any) => {
+        // const handleCommentSubmit = async(watchlist: any) => {
         
-            const newCommentCount = commentCount + 1;
-            setCommentCount(newCommentCount);
+        //     const newCommentCount = commentCount + 1;
+        //     setCommentCount(newCommentCount);
 
-            try {
-                const watchlistRef = doc(db, "watchlists", watchlist.id);
-                await updateDoc(watchlistRef, {
-                    comments: newCommentCount,
-                });
-                    console.log(watchlist.title, "comments:", newCommentCount);
-                } catch (error) {
-                    console.error("Failed to update comment count", error);
-                }
+        //     try {
+        //         const watchlistRef = doc(db, "watchlists", watchlist.id);
+        //         await updateDoc(watchlistRef, {
+        //             comments: newCommentCount,
+        //         });
+        //             console.log(watchlist.title, "comments:", newCommentCount);
+        //         } catch (error) {
+        //             console.error("Failed to update comment count", error);
+        //         }
 
-            };
+        //     };
 
         const handleCommentClick = async (watchlist: any) => {
             console.log("Leave a comment");
@@ -275,6 +274,15 @@ export default function Watchlist({
 
                             <TfiComment key={`${watchlist.id}-comment`}  className={styles.comment} onClick={() => handleCommentClick(watchlist)}/>
                             <span>{comments}</span>
+                        </div>
+                        
+                        <div className={styles.commentSection}>
+                            <h3>Comments</h3>
+                            <ul>
+                                {Array.isArray(watchlist.comments.comments) && watchlist.comments.comments.map((comment: any, idx: number) =>
+                                        <li className={styles.comment} key={idx}>{comment}</li>
+                                    )}
+                            </ul>
                         </div>
                     </div>
                 ))

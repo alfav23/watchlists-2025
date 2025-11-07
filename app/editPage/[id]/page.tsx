@@ -71,7 +71,7 @@ export default function EditPage() {
     e.preventDefault();
     if (!watchlist) return;
     try {
-  const ref = doc(db, "watchlists", id!);
+      const ref = doc(db, "watchlists", id!);
       await updateDoc(ref, {
         title,
         genre,
@@ -89,7 +89,6 @@ export default function EditPage() {
   if (!watchlist) return <p>Watchlist not found</p>;
 
   const image = "/images/cinnamoroll.png";
-  const colorPalette = ["#ffb3ba", "#ffdfba", "#ffffba", "#baffc9", "#bae1ff"];
 
   return (
   
