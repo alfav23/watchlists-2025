@@ -57,7 +57,7 @@ export const SignUpPage = () => {
                 userName,
                 email: user.email,
                 createdAt: new Date(),
-                profilePicURL: "https://picsum.photos/50"
+                photoURL: "https://picsum.photos/50"
             });
 
             setSuccess("Account created successfully! Redirecting...");

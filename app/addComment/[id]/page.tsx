@@ -35,6 +35,7 @@ export default function addComment () {
                     setWatchlist(null);
                 } else {
                     const data = { id: snap.id, ...(snap.data() as any) };
+                    console.log(data)
                     setWatchlist(data); 
                 } 
             } catch(error) {
@@ -48,15 +49,17 @@ export default function addComment () {
         e.preventDefault();
     
         if (!watchlist) return;
-        
-        if (commentInput == "") return;
-        
+        if (commentInput.trim() === "") return;
+
         try {
             const ref = doc(db, "watchlists", id!);
-
+            console.log(watchlist)
             const commentsArray = watchlist.comments;
             const comments = commentsArray.comments;
+            console.log("comments", comments)
             setCommentCount(comments.length + 1);
+            console.log("comment count", commentCount);
+            
             await updateDoc(ref, {
                 comments: {
                     commentCount: commentCount,
@@ -65,7 +68,7 @@ export default function addComment () {
             });
             
             setCommentInput("");
-            console.log("Comment,", "'", commentInput, "'", ",successfully added to watchlist:", id);
+            console.log("Comment,", "'", commentInput, "', ", "successfully added to watchlist:", id);
         } catch (error) {
             console.log("could not update comments", error);
         }
