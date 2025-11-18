@@ -176,6 +176,25 @@ export default function Watchlist({
             router.push(`/${watchlist.id}`)
         };
 
+        const getInfo = async() => {
+            const url = 'https://imdb236.p.rapidapi.com/api/imdb/cast/nm0000190/titles';
+            const options = {
+                method: 'GET',
+                headers: {
+                    'x-rapidapi-key': '38a92bbf0amsh50e9a4f107733e5p1370ffjsnf948a3269db3',
+                    'x-rapidapi-host': 'imdb236.p.rapidapi.com'
+                }
+            };
+
+            try {
+                const response = await fetch(url, options);
+                const result = await response.text();
+                console.log(result);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
     // filter watchlists based on public or private status
     const watchlists = collection(db, "watchlists");
     const q = query(watchlists, where("private", "==", false));
@@ -244,7 +263,7 @@ export default function Watchlist({
                                 {/* map watchlist.items */}
                                 <ul className={styles.items}>
                                     {Array.isArray(watchlist.items) && watchlist.items.map((item: any, idx: number) =>
-                                        <li key={idx}>{item}</li>
+                                        <li onClick={getInfo} key={idx} style={{color: "#000000"}}> {item}</li>
                                     )}
                                 </ul>
                                 <div className={styles.tags}>
