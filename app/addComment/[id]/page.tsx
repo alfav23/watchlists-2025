@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/firebaseConfig";
 import { useAuth } from '@/context/AuthContext';
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import styles from "../addComment.module.scss";
@@ -57,10 +57,17 @@ export default function addComment () {
             const comments = Array.isArray(commentsArray.comments) ? commentsArray.comments : [];
             const newCount = comments.length + 1;
 
+            const commentObj = {
+                text: commentInput,
+                userId: user?.uid ?? null,
+                username: user?.displayName ? user.displayName.replaceAll(" ", "") : null,
+                createdAt: serverTimestamp()
+            };
+
             await updateDoc(ref, {
                 comments: {
                     commentCount: newCount,
-                    comments: [...comments, commentInput]
+                    comments: [...comments, commentObj]
                 }
             });
 

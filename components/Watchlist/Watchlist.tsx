@@ -285,15 +285,23 @@ export default function Watchlist({
                             <span>{Array.isArray(watchlist.likedBy) ? watchlist.likedBy.length : (watchlist.likes ?? 0)}</span>
 
                             <TfiComment key={`${watchlist.id}-comment`}  className={styles.comment} onClick={() => handleCommentClick(watchlist)}/>
-                            <span>{comments}</span>
+                            <span>{watchlist.comments.commentCount}</span>
                         </div>
                         
-                        <div className={styles.commentSection}>
+                        <div className={styles.commentSection} style={{display: 'none'}}>
                             <h3>Comments</h3>
                             <ul>
-                                {Array.isArray(watchlist.comments.comments) && watchlist.comments.comments.map((comment: any, idx: number) =>
-                                        <li className={styles.comment} key={idx}>{comment}</li>
-                                    )}
+                                {Array.isArray(watchlist.comments?.comments) && watchlist.comments.comments.map((comment: any, idx: number) => {
+                                        const isString = typeof comment === 'string';
+                                        const username = isString ? null : (comment.username ?? comment.userId ?? 'Anonymous');
+                                        const text = isString ? comment : (comment.text ?? '');
+                                        return (
+                                            <li className={styles.comment} key={idx}>
+                                                {username && <div className={styles.commentHeader}><strong>{username}</strong></div>}
+                                                <div className={styles.commentBody}>{text}</div>
+                                            </li>
+                                        );
+                                    })}
                             </ul>
                         </div>
                     </div>
