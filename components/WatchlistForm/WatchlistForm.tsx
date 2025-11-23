@@ -23,15 +23,17 @@ const WatchlistForm = () => {
     const [ isPrivate, setIsPrivate ] = useState<boolean>(true);
 
     const handleAddShow = () => {
-        items.push(item);
-        setItems(items);
-        console.log("Show added:", item, "to list:", items)
+        if (!item || item.trim() === "") return;
+        setItems(prev => [...prev, item.trim()]);
+        setItem("");
+        console.log("Show added:", item);
     }
 
     const handleAddTag = async () => {
-        tags.push(tag);
-        setTags(tags);
-        console.log("Show added:", tag, "to list:", tags)
+        if (!tag || tag.trim() === "") return;
+        setTags(prev => [...prev, tag.trim()]);
+        setTag("");
+        console.log("Tag added:", tag);
     }
 
     const pushList = async(event: React.FormEvent) => {
@@ -103,9 +105,9 @@ const WatchlistForm = () => {
                             placeholder="Movie or show title"
                             onChange={(e) => setItem(e.target.value)}
                         />
-                        <button  
-                            type="submit"
-                            onSubmit={handleAddShow}
+                        <button
+                            type="button"
+                            onClick={handleAddShow}
                             className={styles.addShowButton}
                         >
                             Add movie or show to your list!
@@ -130,8 +132,8 @@ const WatchlistForm = () => {
                             onChange={(e) => setTag(e.target.value)}
                         />
                         <button 
-                            type="submit"
-                            onSubmit={handleAddTag} 
+                            type="button"
+                            onClick={handleAddTag} 
                             className={styles.addTagButton}
                         >
                             Add tags
