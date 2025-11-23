@@ -41,7 +41,6 @@ export default function Watchlist({
     const [ savedWatchlists, setSavedWatchlists ] = useState<{[key: string]: boolean}>({});
     const [ commentCount, setCommentCount ] = useState(comments || 0);
     const { user, loading } = useAuth();
-    const colorPalette = ["#ffb3ba", "#ffdfba", "#ffffba", "#baffc9", "#bae1ff"];
     const profilePicURL = "https://picsum.photos/50";
     
         let status = "";
@@ -51,24 +50,6 @@ export default function Watchlist({
         } else {
             status = "Public"
         }
-
-        const getProfilePic = async (watchlist: any) => {
-            try {
-                const watchlistRef = doc(db, "watchlists", watchlist.id);
-                const watchlistSnap = await getDoc(watchlistRef);
-                const watchlistData = watchlistSnap.data();
-                const creator = watchlistData?.creatorID;
-                if (!creator) return null;
-
-                const creatorRef = doc(db, "users", creator);
-                const creatorSnap = await getDoc(creatorRef);
-                const creatorData = creatorSnap.data();
-                return JSON.stringify(creatorData?.profilePicURL)  || null;
-            } catch (error) {
-                console.error("Failed to fetch profile pic", error);
-                return null;
-            }
-        };
 
         const handleSave = async (watchlist: any) => {
             if (!user) {
@@ -141,31 +122,28 @@ export default function Watchlist({
             }
         };
 
-        // const handleCommentSubmit = async(watchlist: any) => {
-        
-        //     const newCommentCount = commentCount + 1;
-        //     setCommentCount(newCommentCount);
+        const [ commentDisplayMap, setCommentDisplayMap ] = useState<{[key: string]: boolean}>({});
 
-        //     try {
-        //         const watchlistRef = doc(db, "watchlists", watchlist.id);
-        //         await updateDoc(watchlistRef, {
-        //             comments: newCommentCount,
-        //         });
-        //             console.log(watchlist.title, "comments:", newCommentCount);
-        //         } catch (error) {
-        //             console.error("Failed to update comment count", error);
-        //         }
+        const openComments = async (watchlist: any) => {
+            // If there are no comments, go to add comment page
+            if (!watchlist.comments || watchlist.comments.commentCount === 0){
+                router.push(`/addComment/${watchlist.id}`);
+                return;
+            }
 
-        //     };
+            setCommentDisplayMap(prev => ({
+                ...prev,
+                [watchlist.id]: !prev[watchlist.id]
+            }));
+        }
 
         const handleCommentClick = async (watchlist: any) => {
-            console.log("Leave a comment");
             router.push(`/addComment/${watchlist.id}`);
             
         };
 
         const handleWatchlistClick = async (watchlist: any) => {
-            router.push(`/${watchlist.id}`)
+            router.push(`/watchlists/${watchlist.id}`)
         };
 
         const getInfo = async() => {
@@ -227,7 +205,7 @@ export default function Watchlist({
     // fetchCreator();
 
     return (
-        <div>
+        <div className={styles.feed}>
             {publicWatchlists.length === 0 ? (
                 <p>Your feed is empty!</p>
             ) : (
@@ -284,13 +262,13 @@ export default function Watchlist({
                             />
                             <span>{Array.isArray(watchlist.likedBy) ? watchlist.likedBy.length : (watchlist.likes ?? 0)}</span>
 
-                            <TfiComment key={`${watchlist.id}-comment`}  className={styles.comment} onClick={() => handleCommentClick(watchlist)}/>
+                            <TfiComment key={`${watchlist.id}-comment`}  className={styles.comment} onClick={() => openComments(watchlist)}/>
                             <span>{watchlist.comments.commentCount}</span>
                         </div>
                         
-                        <div className={styles.commentSection} style={{display: 'none'}}>
+                        <div className={styles.commentSection} style={{display: commentDisplayMap[watchlist.id] ? 'block' : 'none'}}>
                             <h3>Comments</h3>
-                            <ul>
+                            <ul className={styles.commentsList}>
                                 {Array.isArray(watchlist.comments?.comments) && watchlist.comments.comments.map((comment: any, idx: number) => {
                                         const isString = typeof comment === 'string';
                                         const username = isString ? null : (comment.username ?? comment.userId ?? 'Anonymous');
@@ -302,7 +280,9 @@ export default function Watchlist({
                                             </li>
                                         );
                                     })}
+                                    
                             </ul>
+                            <button className={styles.addComment} onClick={() => handleCommentClick(watchlist)}>Add comment</button>
                         </div>
                     </div>
                 ))
