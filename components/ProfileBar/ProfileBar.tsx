@@ -49,24 +49,24 @@ export const ProfileBar = () => {
                     />
                     
                     <div className={styles.handle}>
-                        {!user?(
+                        {/* {!user?(
                             <a href='/login'>Log in</a>
                         ):
-                        ( 
+                        (  */}
                         <div>
                             <p>{user?.displayName?.replaceAll(" ", "")}</p>
                             <p>@{user?.displayName?.replaceAll(" ", "")}</p>
                             <a className={styles.logOut} onClick={logOut}>Log Out</a>
                         </div>
-                        )}
+                        {/* )} */}
                     </div>
                 </div>
                 <div className={styles.userOptions}>
                     <Link href='/myLists'>My Watchlists</Link>
-                    <Link href="/my-reviews">My Reviews</Link>
-                    <Link href="/profile-settings">Profile Settings</Link>
+                    {/* <Link href="/my-reviews">My Reviews</Link> */}
+                    {/* <Link href="/profile-settings">Profile Settings</Link> */}
                     <a onClick={handleCreateWatchlist} href="/createWatchlist">Create New Watchlist</a>
-                    <a onClick={handleCreateReview} href="/">Write a Review</a>
+                    {/* <a onClick={handleCreateReview} href="/">Write a Review</a> */}
                 </div>
             </div>
     
