@@ -12,7 +12,7 @@ export const Discover = () => {
                 </div>
             </div>
             <div className={styles.userOptions}>
-                <a>Recommended for you...</a>
+                {/* <a>Recommended for you...</a> */}
                 <a>Anime</a>
                 <a>Trending</a>
                 <a>True Crime</a>

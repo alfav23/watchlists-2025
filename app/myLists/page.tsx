@@ -19,14 +19,6 @@ const privateWatchlistsPage = () => {
     const uid = user?.uid;
     const router = useRouter();
 
-    // // add back when user has profile image option
-    // const image = user.profileImage;
-
-    const image = "https://picsum.photos/50";
-
-    // const [ items, setItems ] = useState<Record<string, string>>({})
-
-
     const deleteWatchlist = async(watchlist: any) => {
         
         const docRef = doc(db, "watchlists", watchlist.id);
@@ -66,30 +58,6 @@ const privateWatchlistsPage = () => {
         }
     }
 
-    // const addShow = async (watchlist: any) => {
-    //     if (!watchlist?.id) {
-    //         console.warn('addShow called without a watchlist');
-    //         return;
-    //     }
-    //     const item = (items[watchlist.id] || '').trim();
-    //     if (!item) {
-    //         // nothing to add
-    //         return;
-    //     }
-
-    //     const docRef = doc(db, "watchlists", watchlist.id);
-    //     const newItems = [ ...(watchlist.items || []), item ];
-    //     try {
-    //         await updateDoc(docRef, {
-    //             items: newItems,
-    //         });
-    //         // clear only this watchlist's input after successful add
-    //         setItems(prev => ({ ...prev, [watchlist.id]: '' }));
-    //     } catch (error) {
-    //         console.log("Unable to add show", error)
-    //     } 
-    // }
-
     const handleEdit = (watchlist: any) => {
         router.push(`/editPage/${watchlist.id}`)
     }
@@ -115,7 +83,7 @@ const privateWatchlistsPage = () => {
 // filter watchlists based on public or private status
     const watchlists = collection(db, "watchlists");
     // build queries only when user is available to avoid undefined values in where()
-    const q = user ? query(watchlists, where("creatorId", "==", user.displayName)) : null;
+    const q = user ? query(watchlists, where("creatorID", "==", user.displayName)) : null;
     const qS = (user && uid) ? query(watchlists, where("favorited", "==", true), where("savedBy", "array-contains", uid)) : null;
     const [privateWatchlists, setPrivateWatchlists] = useState<any[]>([]);
     const [savedWatchlists, setSavedWatchlists] = useState<any[]>([]);
@@ -155,6 +123,17 @@ const privateWatchlistsPage = () => {
                                 <FaSearch />  
                             </div>
                         </div>
+                        <div className={styles.userOptions}>
+                            <Link href='/'>Feed</Link>
+                            / 
+                            {/* <Link href="/my-reviews">My Reviews</Link>
+                            /  */}
+                            {/* <Link href="/profile-settings">Profile Settings</Link>
+                            /  */}
+                            <a onClick={() => {}} href="/createWatchlist">Create New List</a>
+                            {/* / 
+                            <a onClick={() => {}} href="review-form">Write a Review</a> */}
+                        </div>
                         <div className={styles.userInfo}>
                             <Image 
                                 src="/images/cinnamoroll.png"
@@ -169,17 +148,6 @@ const privateWatchlistsPage = () => {
                                 <p>@{user?.displayName?.replaceAll(" ", "")}</p>
                             </div>
                         </div>
-                    </div>
-                    <div className={styles.userOptions}>
-                        <Link href='/'>Feed</Link>
-                        / 
-                        <Link href="/my-reviews">My Reviews</Link>
-                        / 
-                        <Link href="/profile-settings">Profile Settings</Link>
-                        / 
-                        <a onClick={() => {}} href="/createWatchlist">Create New Watchlist</a>
-                        / 
-                        <a onClick={() => {}} href="review-form">Write a Review</a>
                     </div>
                 </div>
             </div>
@@ -196,11 +164,11 @@ const privateWatchlistsPage = () => {
                                     <div className={styles.userInfo}>
                                         <Image 
                                             style={{background: `${watchlist.color}`}}
-                                            src={image}
-                                            // src={creatorID.profilePic}
+                                            src={watchlist?.profilePic ?? watchlist?.creatorId?.photoURL ?? '/images/cinnamoroll.png'}
+                                            // previously tried: src={creatorID.profilePic}
                                             width={50}
                                             height={50}
-                                            alt=''
+                                            alt={watchlist?.creatorID ?? 'creator'}
                                         />
                                     <a href={`/${user?.displayName?.replaceAll(" ", "")}`}>@{user?.displayName?.replaceAll(" ", "")}</a>
                                     </div>
@@ -266,11 +234,10 @@ const privateWatchlistsPage = () => {
                                     <div className={styles.userInfo}>
                                         <Image 
                                             style={{background: `${watchlist.color}`}}
-                                            src={image}
-                                            // src={creatorID.profilePic}
+                                            src={watchlist?.profilePic ?? watchlist?.creatorId?.photoURL ?? '/images/cinnamoroll.png'}
                                             width={50}
                                             height={50}
-                                            alt=''
+                                            alt={watchlist?.creatorID ?? 'creator'}
                                         />
                                     <a href={`/${watchlist.creatorID.replaceAll(" ", "")}`}>@{watchlist.creatorID.replaceAll(" ", "")}</a>
                                     </div>

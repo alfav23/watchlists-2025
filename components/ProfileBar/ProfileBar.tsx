@@ -47,10 +47,10 @@ export const ProfileBar = () => {
             <div className={styles.profileBarContainer}>
                 <div onClick={goToProfile} className={styles.userInfo}>
                     <Image 
-                        src={`/${user?.photoURL}`}
+                        src={user?.photoURL ?? '/images/cinnamoroll.png'}
                         width={50}
                         height={50}
-                        alt=""
+                        alt={user?.displayName ?? 'profile'}
                     />
                     
                     <div className={styles.handle}>
@@ -70,7 +70,7 @@ export const ProfileBar = () => {
                     <Link href='/myLists'>My Watchlists</Link>
                     {/* <Link href="/my-reviews">My Reviews</Link> */}
                     {/* <Link href="/profile-settings">Profile Settings</Link> */}
-                    <a onClick={handleCreateWatchlist} href="/createWatchlist">Create New Watchlist</a>
+                    <a onClick={handleCreateWatchlist} href="/createWatchlist">Create New List</a>
                     {/* <a onClick={handleCreateReview} href="/">Write a Review</a> */}
                 </div>
             </div>

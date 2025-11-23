@@ -60,8 +60,7 @@ export default function addComment () {
             const commentObj = {
                 text: commentInput,
                 userId: user?.uid ?? null,
-                username: user?.displayName ? user.displayName.replaceAll(" ", "") : null,
-                createdAt: serverTimestamp()
+                username: user?.displayName ? user.displayName.replaceAll(" ", "") : null
             };
 
             await updateDoc(ref, {
@@ -92,6 +91,19 @@ export default function addComment () {
                             <FaSearch />  
                         </div>
                     </div>
+                    <div className={styles.userOptions}>
+                        <Link href='/'>Feed</Link>
+                            / 
+                        <Link href='/myLists'>My Watchlists</Link>
+                            / 
+                        {/* <Link href="/my-reviews">My Reviews</Link>
+                            /  */}
+                        {/* <Link href="/profile-settings">Profile Settings</Link>
+                            /  */}
+                        <a onClick={() => {}} href="/createWatchlist">Create New List</a>
+                                        {/* / 
+                        <a onClick={() => {}} href="review-form">Write a Review</a> */}
+                    </div>
                     <div className={styles.userInfo}>
                         <Image 
                             src="/images/cinnamoroll.png"
@@ -106,17 +118,6 @@ export default function addComment () {
                             <p>@{user?.displayName?.replaceAll(" ", "")}</p>
                         </div>
                     </div>
-                </div>
-                <div className={styles.userOptions}>
-                    <Link href='/'>Feed</Link>
-                        / 
-                    <Link href="/my-reviews">My Reviews</Link>
-                        / 
-                    <Link href="/profile-settings">Profile Settings</Link>
-                        / 
-                    <a onClick={() => {}} href="/createWatchlist">Create New Watchlist</a>
-                                    / 
-                    <a onClick={() => {}} href="review-form">Write a Review</a>
                 </div>
             </div>
             <div className={styles.commentFormContainer}>

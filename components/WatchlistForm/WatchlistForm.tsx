@@ -89,14 +89,12 @@ const WatchlistForm = () => {
                     onChange={(e) => setGenre(e.target.value)}
                 />
                 <div className={styles.addItemSection}>
+                    <p>Add at least one movie or show to publish your list!</p>
                     <ul className={styles.itemsList}>
-                        {items.length === 0 ? (
-                            <p>Add at least one movie or show to publish your list!</p>
-                        ) : (
-                        items.map((item) => (
+                        {items.map((item) => (
                             <li key={Math.random()} className={styles.item}> {item}
                             </li>
-                        )))}
+                        ))}
                     </ul>
                     <div className={styles.addItemSection}>
                         <input 
@@ -110,19 +108,17 @@ const WatchlistForm = () => {
                             onClick={handleAddShow}
                             className={styles.addShowButton}
                         >
-                            Add movie or show to your list!
+                            Add
                         </button>
                     </div>
                 </div>
                 <div className={styles.addTagSection}>
+                    <p>Add some tags so people can find your list!</p>
                     <ul className={styles.tagsList}>
-                        {tags.length === 0 ? (
-                            <p>Add some tags so people can find your list!</p>
-                        ) : (
-                        tags.map((tag) => (
+                        {tags.map((tag) => (
                             <li key={Math.random()} className={styles.tag}>{tag}
                             </li>
-                        )))}
+                        ))}
                     </ul>
                     <div>
                         <input 
@@ -136,7 +132,7 @@ const WatchlistForm = () => {
                             onClick={handleAddTag} 
                             className={styles.addTagButton}
                         >
-                            Add tags
+                            Add
                         </button>
                     </div>
                 </div>

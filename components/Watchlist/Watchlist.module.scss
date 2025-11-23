@@ -1,3 +1,8 @@
+.feed {
+    display: flex;
+    flex-direction: column;
+}
+
 .watchlistContainer {
     display: flex;
     margin-bottom: 3rem;
@@ -10,7 +15,7 @@
     width: 100%;
     max-width: 400px;
     min-height: 150px;
-    max-height: 150px;
+    max-height: 300px;
     border: 1px solid black;
     border-radius: 6px;
     // background-color: #ffffba;
@@ -183,10 +188,30 @@
 }
 
 .commentSection {
-    display: none;
     flex-direction: column;
     justify-content: center;
+    height: 100%;
+    max-width: 400px;
     ul {
+        font-size: 12px;
         list-style: none;
+    }
+}
+
+.commentsList {
+    overflow-y: scroll;
+}
+
+.addComment {
+    display: flex;
+    justify-content: center;
+    width: 50%;
+    background-color: #bae1ff;
+    font-family: "PressStart2P", sans-serif;
+    font-size: 12px;
+    overflow-wrap: break-word;
+
+    &:hover {
+        cursor: pointer;
     }
 }

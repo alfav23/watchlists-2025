@@ -71,7 +71,6 @@ body {
 
 .userOptions {
     display: flex;
-    align-items: center;
     justify-content: center;
     gap: 10px;
     font-size: 10px;
@@ -210,6 +209,15 @@ body {
     z-index: 2;
 
     .makePublic {
+        font-size: 24px;
+        z-index: inherit;
+        color: black;
+
+        &:hover{
+            cursor: pointer;
+        }
+    }
+    .makePrivate {
         font-size: 24px;
         z-index: inherit;
         color: black;

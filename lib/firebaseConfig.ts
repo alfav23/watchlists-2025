@@ -23,18 +23,5 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
-
- setPersistence(auth, browserLocalPersistence)
-          .then(() => {
-            // Existing and future Auth states will be stored in local storage.
-            // This is the default behavior for web applications.
-            console.log("Persistence set successfully")
-          })
-          .catch((error) => {
-            // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log(errorMessage, errorCode )
-          });
           
 export { db, auth, storage };
