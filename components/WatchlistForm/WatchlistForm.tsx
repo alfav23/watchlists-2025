@@ -2,15 +2,14 @@
 import styles from "./WatchlistForm.module.scss";
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from "next/navigation";
-import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebaseConfig";
 import { useState } from "react";
 
 const WatchlistForm = () => {
-    const { user, loading } = useAuth();
-
-    if (loading) return null;
+    const { user } = useAuth();
     const router = useRouter();
+
     const colorPalette = ["#ffb3ba", "#ffdfba", "#ffffba", "#baffc9", "#bae1ff"];
 
     // watchlist data values
@@ -23,17 +22,17 @@ const WatchlistForm = () => {
     const [ isPrivate, setIsPrivate ] = useState<boolean>(true);
 
     const handleAddShow = () => {
-        if (!item || item.trim() === "") return;
         setItems(prev => [...prev, item.trim()]);
         setItem("");
         console.log("Show added:", item);
+        if (!item || item.trim() === "") return;
     }
 
     const handleAddTag = async () => {
-        if (!tag || tag.trim() === "") return;
         setTags(prev => [...prev, tag.trim()]);
         setTag("");
         console.log("Tag added:", tag);
+        if (!tag || tag.trim() === "") return;
     }
 
     const pushList = async(event: React.FormEvent) => {
@@ -53,6 +52,8 @@ const WatchlistForm = () => {
                 commentCount: 0,
                 comments: []
             },
+            // save creator profile image URL for reliable rendering in the feed
+            profilePic: user?.photoURL ?? null,
             favorited: false,
             color: colorPalette[Math.floor(Math.random()*(4 - 0 + 1) + 0)]
             // profilePic: user?.profilePicURL

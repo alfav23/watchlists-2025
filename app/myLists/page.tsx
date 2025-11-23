@@ -13,6 +13,7 @@ import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { RiStarOffLine } from "react-icons/ri";
+import { Filter } from 'firebase-admin/firestore';
 
 const privateWatchlistsPage = () => {
     const { user, loading } = useAuth();
@@ -164,8 +165,7 @@ const privateWatchlistsPage = () => {
                                     <div className={styles.userInfo}>
                                         <Image 
                                             style={{background: `${watchlist.color}`}}
-                                            src={watchlist?.profilePic ?? watchlist?.creatorId?.photoURL ?? '/images/cinnamoroll.png'}
-                                            // previously tried: src={creatorID.profilePic}
+                                            src={'/images/cinnamoroll.png'}
                                             width={50}
                                             height={50}
                                             alt={watchlist?.creatorID ?? 'creator'}
@@ -189,13 +189,6 @@ const privateWatchlistsPage = () => {
                                             </li>
                                         ))}
                                     </ul>
-                                    {/* <input 
-                                        type="text"
-                                        placeholder='movie or show'
-                                        value={items[watchlist.id] || ''}
-                                        onChange={(e) => setItems(prev => ({ ...prev, [watchlist.id]: e.target.value }))} 
-                                    />
-                                    <button onClick={() => addShow(watchlist)} className={styles.addNewItem}>Add New Item</button> */}
                                     <div className={styles.tags}>
                                         <p>Tags:</p>
                                         {Array.isArray(watchlist.tags) && watchlist.tags.map((tag: string, idx: number) => (
@@ -234,7 +227,7 @@ const privateWatchlistsPage = () => {
                                     <div className={styles.userInfo}>
                                         <Image 
                                             style={{background: `${watchlist.color}`}}
-                                            src={watchlist?.profilePic ?? watchlist?.creatorId?.photoURL ?? '/images/cinnamoroll.png'}
+                                            src={'/images/cinnamoroll.png'}
                                             width={50}
                                             height={50}
                                             alt={watchlist?.creatorID ?? 'creator'}

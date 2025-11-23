@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
 import { useAuth } from '@/context/AuthContext';
 import WatchlistForm from "../WatchlistForm";
+// profile images will be static
 
 export const ProfileBar = () => {
 
@@ -14,6 +15,7 @@ export const ProfileBar = () => {
     if (loading) {
         return null; // or a loading placeholder
     }
+    
     const goToProfile = () => {
         if (!user || !user.displayName) return;
                 
@@ -33,11 +35,7 @@ export const ProfileBar = () => {
             console.log("An error happened", error);
         });
     }
-
-    // const handleCreateReview = () => {
-    //     // review form
-    // }
-
+    
     const handleCreateWatchlist = async () => {
         <WatchlistForm />
     }
@@ -47,7 +45,7 @@ export const ProfileBar = () => {
             <div className={styles.profileBarContainer}>
                 <div onClick={goToProfile} className={styles.userInfo}>
                     <Image 
-                        src={user?.photoURL ?? '/images/cinnamoroll.png'}
+                        src={'/images/cinnamoroll.png'}
                         width={50}
                         height={50}
                         alt={user?.displayName ?? 'profile'}

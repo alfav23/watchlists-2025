@@ -5,7 +5,7 @@ import Image from "next/image";
 import { CiStar, CiHeart } from 'react-icons/ci';
 import { TfiComment } from "react-icons/tfi";
 import { db } from "../../lib/firebaseConfig";
-import { doc, updateDoc, collection, query, getDocs, where, getDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { doc, updateDoc, collection, query, getDocs, where, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { IoMdHeart } from "react-icons/io";
 import { FaStar } from "react-icons/fa6";
@@ -41,7 +41,7 @@ export default function Watchlist({
     const [ savedWatchlists, setSavedWatchlists ] = useState<{[key: string]: boolean}>({});
     const [ commentCount, setCommentCount ] = useState(comments || 0);
     const { user, loading } = useAuth();
-    const profilePicURL = "https://picsum.photos/50";
+
     
         let status = "";
 
@@ -186,23 +186,13 @@ export default function Watchlist({
             setLikedWatchlists(likedMap);
             setSavedWatchlists(savedMap);
         }
+
     };
 
     useEffect(() => {
         // refetch when user changes (or becomes available)
         fetchPublicWatchlists();
     }, [user]);
-
-    // // get profile pic from users collection
-    // const users = collection(db, "users");
-    // const qU = query(users, where("userId", "==", "creatorId"));
-
-    // const fetchCreator = async () =>{
-    //     const querySnapshotU = await getDocs(qU);
-    //     const userIds = querySnapshotU.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-    // };
-    // fetchCreator();
 
     return (
         <div className={styles.feed}>
@@ -216,12 +206,12 @@ export default function Watchlist({
                                 <div className={styles.userInfo}>
                                     <Image 
                                         style={{background: `${watchlist.color}`}}
-                                        src={profilePicURL}
+                                        src={'/images/cinnamoroll.png'}
                                         width={50}
                                         height={50}
-                                        alt=''
+                                        alt={watchlist?.creatorID ?? 'creator'}
                                     />
-                                    <a href={watchlist.creatorID}>@{watchlist.creatorID.replaceAll(" ", "")}</a>
+                                    <p>@{watchlist.creatorID.replaceAll(" ", "")}</p>
                                 </div>
                                 <div className={styles.watchlistDescription}>
                                     <p>{watchlist.private ? "Private" : "Public"}</p>
