@@ -250,7 +250,7 @@ export default function Watchlist({
                                         height={50}
                                         alt=''
                                     />
-                                    <a href={watchlist.creatorID}>@{watchlist.creatorID}</a>
+                                    <a href={watchlist.creatorID}>@{watchlist.creatorID.replaceAll(" ", "")}</a>
                                 </div>
                                 <div className={styles.watchlistDescription}>
                                     <p>{watchlist.private ? "Private" : "Public"}</p>
