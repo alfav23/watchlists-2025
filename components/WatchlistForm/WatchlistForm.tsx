@@ -49,7 +49,7 @@ const WatchlistForm = () => {
             saves: 0,
             comments: {
                 commentCount: 0,
-                comments: [""]
+                comments: []
             },
             favorited: false,
             color: colorPalette[Math.floor(Math.random()*(4 - 0 + 1) + 0)]
