@@ -1,14 +1,15 @@
 "use client";
 import styles from "./WatchlistForm.module.scss";
-import { getAuth } from "firebase/auth";
+import { useAuth } from '@/context/AuthContext';
 import { useRouter } from "next/navigation";
 import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebaseConfig";
 import { useState } from "react";
 
 const WatchlistForm = () => {
-    const auth = getAuth();
-    const user = auth.currentUser;
+    const { user, loading } = useAuth();
+
+    if (loading) return null;
     const router = useRouter();
     const colorPalette = ["#ffb3ba", "#ffdfba", "#ffffba", "#baffc9", "#bae1ff"];
 

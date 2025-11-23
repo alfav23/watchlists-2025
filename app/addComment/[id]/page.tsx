@@ -1,7 +1,7 @@
 'use client';
 
 import { db } from "@/lib/firebaseConfig";
-import { getAuth } from "firebase/auth";
+import { useAuth } from '@/context/AuthContext';
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -21,8 +21,7 @@ export default function addComment () {
     const params = useParams();
     const id = params?.id as string | undefined;
     const router = useRouter();
-    const auth = getAuth();
-    const user = auth.currentUser;
+    const { user, loading } = useAuth();
 
     useEffect(() => {
         if (!id) return;
@@ -54,21 +53,20 @@ export default function addComment () {
         try {
             const ref = doc(db, "watchlists", id!);
             console.log(watchlist)
-            const commentsArray = watchlist.comments;
-            const comments = commentsArray.comments;
-            console.log("comments", comments)
-            setCommentCount(comments.length + 1);
-            console.log("comment count", commentCount);
-            
+            const commentsArray = watchlist.comments || { commentCount: 0, comments: [] };
+            const comments = Array.isArray(commentsArray.comments) ? commentsArray.comments : [];
+            const newCount = comments.length + 1;
+
             await updateDoc(ref, {
                 comments: {
-                    commentCount: commentCount,
+                    commentCount: newCount,
                     comments: [...comments, commentInput]
-                } 
+                }
             });
-            
+
+            setCommentCount(newCount);
             setCommentInput("");
-            console.log("Comment,", "'", commentInput, "', ", "successfully added to watchlist:", id);
+            console.log("Comment added successfully to watchlist:", id);
         } catch (error) {
             console.log("could not update comments", error);
         }

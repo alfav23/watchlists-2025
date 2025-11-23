@@ -1,5 +1,6 @@
 "use client";
 import styles from './MyLists.module.scss';
+import AuthGuard from '@/components/AuthGuard/AuthGuard';
 import { db } from "@/lib/firebaseConfig";
 import { arrayRemove, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
@@ -7,14 +8,14 @@ import Image from 'next/image';
 import { FaSearch, FaTrash } from "react-icons/fa"; 
 import { MdEdit } from 'react-icons/md';
 import { FaEye } from 'react-icons/fa6';
-import { getAuth} from 'firebase/auth';
+import { FaEyeSlash } from "react-icons/fa";
+import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { RiStarOffLine } from "react-icons/ri";
 
 const privateWatchlistsPage = () => {
-    const auth = getAuth();
-    const user = auth.currentUser;
+    const { user, loading } = useAuth();
     const uid = user?.uid;
     const router = useRouter();
 
@@ -24,6 +25,7 @@ const privateWatchlistsPage = () => {
     const image = "https://picsum.photos/50";
 
     // const [ items, setItems ] = useState<Record<string, string>>({})
+
 
     const deleteWatchlist = async(watchlist: any) => {
         
@@ -92,13 +94,19 @@ const privateWatchlistsPage = () => {
         router.push(`/editPage/${watchlist.id}`)
     }
 
-    const handleMakePublic = async (watchlist: any) => {
+    const handleChangePrivacy = async (watchlist: any) => {
         try {
             const docRef = doc(db, "watchlists", watchlist.id);
-            await updateDoc(docRef, {
-                private: false
-            });
-                console.log(watchlist, "successfully made public");
+            if (watchlist.private == true){
+                await updateDoc(docRef, {
+                    private: false
+                });
+                    console.log(watchlist, "successfully made public"); 
+            } else {
+                await updateDoc(docRef, {
+                    private: true
+                });
+            }
             } catch (error) {
                 console.error("Failed to update watchlist status", error);
             }
@@ -106,30 +114,34 @@ const privateWatchlistsPage = () => {
 
 // filter watchlists based on public or private status
     const watchlists = collection(db, "watchlists");
-    const q = query(watchlists, where("private", "==", true));
-    const qS = query(watchlists, where("favorited", "==", true));
+    // build queries only when user is available to avoid undefined values in where()
+    const q = user ? query(watchlists, where("creatorId", "==", user.displayName)) : null;
+    const qS = (user && uid) ? query(watchlists, where("favorited", "==", true), where("savedBy", "array-contains", uid)) : null;
     const [privateWatchlists, setPrivateWatchlists] = useState<any[]>([]);
     const [savedWatchlists, setSavedWatchlists] = useState<any[]>([]);
 
     useEffect(() => {
         const fetchPrivateWatchlists = async () => {
+            if (!q) return;
             const querySnapshot = await getDocs(q);
             const lists = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             setPrivateWatchlists(lists);
         };
         fetchPrivateWatchlists();
-    }, []);
+    }, [q]);
 
     useEffect(() => {
         const fetchSavedWatchlists = async () => {
+            if (!qS) return;
             const querySnapshot = await getDocs(qS);
             const lists = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             setSavedWatchlists(lists);
         };
         fetchSavedWatchlists();
-    }, []);
+    }, [qS]);
 
     return (
+        <AuthGuard>
         <div className={styles.mainContent}>
             <div className={styles.headerContainer}>
                 <h1>{user?.displayName?.replaceAll(" ", "")}'s watchlists</h1>
@@ -171,7 +183,7 @@ const privateWatchlistsPage = () => {
                     </div>
                 </div>
             </div>
-            <h2>Private Lists:</h2>
+            <h2>My Lists:</h2>
             <div className={styles.privateListsFeed}>
                 {privateWatchlists.length === 0 ? (
                     <p>Nothing to see here!</p>
@@ -224,8 +236,12 @@ const privateWatchlistsPage = () => {
                                     </div>
                                 </div>
                                 <div className={styles.actions}>
-                                    <FaEye className={styles.makePublic} onClick={()  => handleMakePublic(watchlist)}/>
-
+                                    {(watchlist.private == true)?(
+                                        <FaEye className={styles.makePublic} onClick={()  => handleChangePrivacy(watchlist)}/>
+                                    ):
+                                    (
+                                        <FaEyeSlash className={styles.makePrivate} onClick={()  => handleChangePrivacy(watchlist)}/>
+                                        )}
                                     <MdEdit className={styles.edit} onClick={() => handleEdit(watchlist)}/>
 
                                     <FaTrash className={styles.delete} onClick={() => deleteWatchlist(watchlist)}/>
@@ -256,7 +272,7 @@ const privateWatchlistsPage = () => {
                                             height={50}
                                             alt=''
                                         />
-                                    <a href={`/${watchlist.creatorID}`}>@{watchlist.creatorID}</a>
+                                    <a href={`/${watchlist.creatorID.replaceAll(" ", "")}`}>@{watchlist.creatorID.replaceAll(" ", "")}</a>
                                     </div>
                                     <div className={styles.watchlistDescription}>
                                         <p>{watchlist.private ? "Private" : "Public"}</p>
@@ -290,6 +306,7 @@ const privateWatchlistsPage = () => {
                 )}
             </div>
         </div>
+        </AuthGuard>
     );
 }
 

@@ -9,7 +9,7 @@ import { doc, updateDoc, collection, query, getDocs, where, getDoc, arrayUnion, 
 import { useRouter } from 'next/navigation';
 import { IoMdHeart } from "react-icons/io";
 import { FaStar } from "react-icons/fa6";
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { useAuth } from '@/context/AuthContext';
 
 interface WatchlistProps {
     watchlist: object;
@@ -40,15 +40,7 @@ export default function Watchlist({
     const [ likedWatchlists, setLikedWatchlists ] = useState<{[key: string]: boolean}>({});
     const [ savedWatchlists, setSavedWatchlists ] = useState<{[key: string]: boolean}>({});
     const [ commentCount, setCommentCount ] = useState(comments || 0);
-    const auth = getAuth();
-    const [currentUser, setCurrentUser] = useState(auth.currentUser);
-
-    useEffect(() => {
-        const unsub = onAuthStateChanged(auth, (u) => {
-            setCurrentUser(u);
-        });
-        return () => unsub();
-    }, [auth]);
+    const { user, loading } = useAuth();
     const colorPalette = ["#ffb3ba", "#ffdfba", "#ffffba", "#baffc9", "#bae1ff"];
     const profilePicURL = "https://picsum.photos/50";
     
@@ -79,12 +71,12 @@ export default function Watchlist({
         };
 
         const handleSave = async (watchlist: any) => {
-            if (!currentUser) {
+            if (!user) {
                 console.warn('User not signed in, cannot save');
                 router.push("/signup");
                 return;
             }
-            const uid = currentUser.uid;
+            const uid = user.uid;
             const isSaved = savedWatchlists[watchlist.id];
 
             try {
@@ -116,11 +108,11 @@ export default function Watchlist({
         };
 
         const handleLike = async(watchlist: any) => {
-            if (!currentUser) {
+            if (!user) {
                 console.warn('User not signed in, cannot like');
                 return;
             }
-            const uid = currentUser.uid;
+            const uid = user.uid;
             const isLiked = likedWatchlists[watchlist.id];
 
             try {
@@ -206,12 +198,12 @@ export default function Watchlist({
         setPublicWatchlists(lists);
 
         // Set per-watchlist liked/saved state for current user
-        if (currentUser) {
+        if (user) {
             const likedMap: {[key: string]: boolean} = {};
             const savedMap: {[key: string]: boolean} = {};
             lists.forEach((l: any) => {
-                likedMap[l.id] = Array.isArray(l.likedBy) ? l.likedBy.includes(currentUser.uid) : false;
-                savedMap[l.id] = Array.isArray(l.savedBy) ? l.savedBy.includes(currentUser.uid) : false;
+                likedMap[l.id] = Array.isArray(l.likedBy) ? l.likedBy.includes(user.uid) : false;
+                savedMap[l.id] = Array.isArray(l.savedBy) ? l.savedBy.includes(user.uid) : false;
             });
             setLikedWatchlists(likedMap);
             setSavedWatchlists(savedMap);
@@ -219,8 +211,9 @@ export default function Watchlist({
     };
 
     useEffect(() => {
+        // refetch when user changes (or becomes available)
         fetchPublicWatchlists();
-    }, [currentUser]);
+    }, [user]);
 
     // // get profile pic from users collection
     // const users = collection(db, "users");

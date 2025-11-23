@@ -5,7 +5,7 @@ import styles from "../editPage.module.scss";
 import { useParams, useRouter } from "next/navigation";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebaseConfig";
-import { getAuth } from "firebase/auth";
+import { useAuth } from '@/context/AuthContext';
 import Image from "next/image";
 import Link from "next/link";
 import { FaSearch } from "react-icons/fa";
@@ -14,10 +14,9 @@ export default function EditPage() {
   const params = useParams();
   const id = params?.id as string | undefined;
   const router = useRouter();
-  const auth = getAuth();
-  const user = auth.currentUser;
+  const { user, loading } = useAuth();
 
-  const [loading, setLoading] = useState(true);
+  const [pageLoading, setPageLoading] = useState(true);
   const [watchlist, setWatchlist] = useState<any>(null);
 
   // form fields
@@ -31,7 +30,7 @@ export default function EditPage() {
   useEffect(() => {
     if (!id) return;
     const fetchWatchlist = async () => {
-      setLoading(true);
+      setPageLoading(true);
       try {
         const ref = doc(db, "watchlists", id!);
         const snap = await getDoc(ref);
@@ -49,7 +48,7 @@ export default function EditPage() {
       } catch (e) {
         console.error("Failed to fetch watchlist", e);
       } finally {
-        setLoading(false);
+        setPageLoading(false);
       }
     };
     fetchWatchlist();
@@ -85,7 +84,7 @@ export default function EditPage() {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (pageLoading) return <p>Loading...</p>;
   if (!watchlist) return <p>Watchlist not found</p>;
 
   const image = "/images/cinnamoroll.png";

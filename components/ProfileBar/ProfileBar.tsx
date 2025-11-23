@@ -2,16 +2,18 @@ import styles from './ProfileBar.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { getAuth, signOut} from 'firebase/auth';
+import { signOut } from 'firebase/auth';
+import { useAuth } from '@/context/AuthContext';
 import WatchlistForm from "../WatchlistForm";
 
 export const ProfileBar = () => {
 
     const router = useRouter();
-    const auth = getAuth();
-    const user = auth.currentUser;
+    const { user, loading } = useAuth();
 
-    console.log(auth.currentUser);
+    if (loading) {
+        return null; // or a loading placeholder
+    }
     const goToProfile = () => {
         if (!user || !user.displayName) return;
                 
@@ -20,7 +22,10 @@ export const ProfileBar = () => {
         }
     }
 
-    const logOut = () => {
+    const logOut = async () => {
+        const { getAuth } = await import('firebase/auth');
+        const auth = getAuth();
+        // call signOut on the auth instance
         signOut(auth).then(() => {
             router.push('/login')
             console.log("Sign out successful")
@@ -29,9 +34,9 @@ export const ProfileBar = () => {
         });
     }
 
-    const handleCreateReview = () => {
-        // review form
-    }
+    // const handleCreateReview = () => {
+    //     // review form
+    // }
 
     const handleCreateWatchlist = async () => {
         <WatchlistForm />
