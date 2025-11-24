@@ -268,3 +268,55 @@ body {
         cursor: pointer;
     }
 }
+
+@media screen and (max-width: 768px) {
+    .privateListsFeed, .savedListsFeed {
+        flex-direction: column;
+    }
+    
+    .watchlistContainer {
+        width: 400px;
+    }
+
+}
+
+@media screen and (max-width: 425px) {
+    .headerContainer {
+        h1 {
+           font-size: 24px;
+        }
+    }
+
+    .privateListsFeed, .savedListsFeed {
+        flex-direction: column;
+        padding-left: 0;
+    }
+
+    .watchlistContainer {
+        width: 90%;
+        margin: 10px;
+    }
+
+    .watchlist {
+        width: 100%;
+    }
+
+    .watchlistHeader {
+        width: 40%;
+        overflow-wrap: break-word;
+    }
+
+    .watchlistContent{
+        width: 40%;
+        padding-left: 10px;
+    }
+
+    .watchlistDescription{
+        width: 40%;
+    }
+
+    .watchlistTitle{
+        font-size: 12px;
+    }
+}
+

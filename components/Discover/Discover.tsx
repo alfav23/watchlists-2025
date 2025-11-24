@@ -4,7 +4,7 @@ import { FaSearch } from "react-icons/fa";
 export const Discover = () => {
     return (
         <div className={styles.discoverContainer}>
-            Discover
+            <div className={styles.discoverTitle}>Discover</div>
             <div className={styles.searchContainer}>
                 <input className={styles.search} type="text" placeholder="Search"/>
                 <div className={styles.searchIcon}>

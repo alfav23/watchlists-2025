@@ -215,3 +215,28 @@
         cursor: pointer;
     }
 }
+
+@media screen and (max-width: 425px){
+    
+    .feed {
+        align-items: center;
+        padding-left: 20px;
+    }
+
+    .watchlistContainer {
+        width: 75%;
+        justify-content: center;
+    }
+
+    .watchlist {
+        width: 75%;
+        max-height: 150px;
+    }
+    .watchlistContent {
+        width: 50%;
+    }
+
+    .watchlistTitle {
+        font-size: 12px;
+    }
+}   

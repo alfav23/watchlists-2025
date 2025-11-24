@@ -8,11 +8,6 @@ export const Feed = () => {
         <div className={styles.feedContainer}>
             <div className={styles.feedTitle}>
                 <h1>Feed</h1>
-                {/* <div className={styles.feedTabs}>
-                    <button className={styles.friendsTab}>friends</button>
-                    <button className={styles.everyoneTab}>everyone
-                    </button>
-                </div> */}
             </div>
             <div className={styles.watchlistsContainer}>
                 <ul>

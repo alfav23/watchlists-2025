@@ -66,26 +66,4 @@
     padding: 0;
     margin: 0;
   }
-
-  .feedTitle {
-    display: none;
-  }
-}
-
-.watchlistForm {
-  position: fixed;
-  z-index: 1000;
-  display: flex;
-  background-color: white;
-  border: 1px solid black;
-  box-shadow: -8px 8px ;
-  border-radius: 6px;
-  width: 450px;
-}
-
-@media screen and (max-width: 1440px) {
-  .feedTitle {
-    display: flex;
-    justify-content: center;
-  }
 }

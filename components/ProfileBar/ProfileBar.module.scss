@@ -5,7 +5,6 @@
     padding: 20px;
     border-radius: 6px;
     border: 1px solid black;
-    // box-shadow: -8px 8px 0 black;
     background-color: #bae1ff;
 
     img {
@@ -57,7 +56,31 @@
 }
 
 @media screen and (max-width: 425px) {
-  .profileBarContainer {
-    display: none;
-  }
+    .profileBarContainer {
+        flex-direction: row;
+        padding: 10px;
+        border: 1px solid black;
+    }
+
+    .userInfo {
+        flex-direction: column;
+        width: 30%;
+        word-wrap: break-word;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        padding-right: 5px;
+        border: none;
+        border-right: 1px solid black;
+        border-radius: 0;
+
+        .handle {
+            width: 100%;
+        }
+    }
+
+    .userOptions {
+        padding: 20px;
+        justify-content: space-between;
+    }
 }

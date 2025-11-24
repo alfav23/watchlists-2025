@@ -20,7 +20,6 @@ body {
     padding: 20px;
     border-radius: 6px;
     border: 1px solid black;
-    // box-shadow: -8px 8px 0 black;
     background-color: #bae1ff;
 
     img {
@@ -99,6 +98,9 @@ body {
     }
 
     .post {
+        text-align: center;
+        display: flex;
+        justify-content: center;
         font-family: "PressStart2P", sans-serif;
         border-radius: 6px;
         padding: .5rem;
@@ -107,6 +109,28 @@ body {
 
         &:hover{
             cursor: pointer;
+        }
+    }
+}
+@media screen and (max-width: 425px) {
+    .commentForm{
+        align-items: center;
+        input {
+            width: 90%;
+        }
+
+        .userOptions{
+            gap: 0;
+            flex-wrap: wrap;
+            margin: 0;
+        }
+
+        .profileBarContainer {
+            padding: 0;
+        }
+
+        .profileBarInner{
+            padding: 0;
         }
     }
 }

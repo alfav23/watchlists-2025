@@ -52,16 +52,11 @@ export const ProfileBar = () => {
                     />
                     
                     <div className={styles.handle}>
-                        {/* {!user?(
-                            <a href='/login'>Log in</a>
-                        ):
-                        (  */}
                         <div>
                             <p>{user?.displayName?.replaceAll(" ", "")}</p>
                             <p>@{user?.displayName?.replaceAll(" ", "")}</p>
                             <a className={styles.logOut} onClick={logOut}>Log Out</a>
                         </div>
-                        {/* )} */}
                     </div>
                 </div>
                 <div className={styles.userOptions}>
