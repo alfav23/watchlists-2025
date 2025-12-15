@@ -220,23 +220,52 @@
     
     .feed {
         align-items: center;
-        padding-left: 20px;
+    }
+
+    .feedContainer {
+        align-items: center;
     }
 
     .watchlistContainer {
-        width: 75%;
+        max-width: 250px;
         justify-content: center;
     }
 
     .watchlist {
-        width: 75%;
+        max-width: 75%;
         max-height: 150px;
     }
+
+    .watchlistHeader {
+        width: 25%;
+        padding-right: .5rem;
+    }
+
+    .watchlistDescription {
+        width: 100%;
+    }
+
+    .userInfo {
+        display: flex;
+        flex-wrap: wrap;
+        word-break: break-all;
+        width: 100%;
+        overflow: wrap;
+    }
     .watchlistContent {
-        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        width: 70%;
+        word-break: normal;
+        padding-left: .5rem;
     }
 
     .watchlistTitle {
         font-size: 12px;
+    }
+
+    .tags {
+        overflow-x: scroll;
     }
 }   
