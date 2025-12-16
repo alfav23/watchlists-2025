@@ -22,13 +22,14 @@ const WatchlistForm = () => {
     const [ isPrivate, setIsPrivate ] = useState<boolean>(true);
 
     const handleCancel = () => {
-        router.back;
+        router.push("/");
     }
 
     const clearForm = () => {
         setGenre("");
         setItem("");
         setItems([]);
+        setTag("");
         setTags([]);
         setTitle("");
         setIsPrivate(true);
@@ -65,31 +66,33 @@ const WatchlistForm = () => {
                 commentCount: 0,
                 comments: []
             },
-            // save creator profile image URL for reliable rendering in the feed
             profilePic: user?.photoURL ?? null,
             favorited: false,
             color: colorPalette[Math.floor(Math.random()*(4 - 0 + 1) + 0)]
-            // profilePic: user?.profilePicURL
         }
-
-        try {
-            const docRef = await addDoc(collectionRef, newWatchlistData);
-            console.log("Successfully added watchlist with ID:", docRef.id);
-        } catch(e) {
-            console.error("Error adding watchlist:", e);
-        }
-
-        // navigate after creating
-        if (!isPrivate) {
-            router.push("/");
+         if (title === "" || genre === "" || items === ([]) ) {
+            return;
         } else {
-            router.push("/myLists");
+
+            try {
+                const docRef = await addDoc(collectionRef, newWatchlistData);
+                console.log("Successfully added watchlist with ID:", docRef.id);
+            } catch(e) {
+                console.error("Error adding watchlist:", e);
+            }
+
+            // navigate after creating
+            if (!isPrivate) {
+                router.push("/");
+            } else {
+                router.push("/myLists");
+            }
         }
     }
 
     return (
         <div className={styles.watchlistFormContainer}>
-            <form className={styles.watchlistForm} onSubmit={pushList}>
+            <form className={styles.watchlistForm}>
                 <label>Name your list and determine its genre!</label>
                 <input 
                     type="text" 
@@ -165,7 +168,7 @@ const WatchlistForm = () => {
                     <option value="public">Public</option>
                 </select>
                 <div className={styles.buttons}>
-                    <button className={styles.publishWatchlistButton} type="submit">Publish Watchlist</button>
+                    <button className={styles.publishWatchlistButton} onClick={pushList}>Publish Watchlist</button>
 
                     <button type="reset" className={styles.clearButton} onClick={clearForm}>Restart</button>
 
