@@ -1,10 +1,55 @@
 .watchlistFormContainer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: white;
+    max-width: 100%;
+    margin-top: 2rem;
+    background-color: #bae1ff;
+    padding: 2rem;
     border: 1px solid black;
-    z-index: 999;
+    border-radius: 6px;
+    font-size: 12px;
+
+    .watchlistForm {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    input {
+        font-family: "PressStart2P", sans-serif;
+        font-size: 12px;
+        padding: .25rem;
+        border-radius: 4px;
+        border: 1px solid grey;
+    }
+
+    button {
+        font-family: "PressStart2P", sans-serif;
+        font-size: 12px;
+        padding: .25rem;
+        background-color: plum;
+        border-radius: 4px;
+    }
+
+    select {
+        font-family: "PressStart2P", sans-serif;
+        font-size: 12px;
+        padding: .25rem;
+        border-radius: 4px;
+        margin-bottom: 1rem;
+    }
+
+    .buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem
+    }
+
+    .cancelButton, .clearButton {
+        font-family: "PressStart2P", sans-serif;
+        font-size: 12px;
+        padding: .25rem;
+        border-radius: 4px;
+        background-color: plum;
+    }
 }

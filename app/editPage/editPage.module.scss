@@ -20,7 +20,6 @@ body {
     padding: 20px;
     border-radius: 6px;
     border: 1px solid black;
-    // box-shadow: -8px 8px 0 black;
     background-color: #bae1ff;
 
     img {
@@ -75,7 +74,7 @@ body {
     justify-content: center;
     gap: 10px;
     font-size: 10px;
-    margin-top: 10px;
+    margin-top: 1rem;
     
 
     a {
@@ -101,7 +100,6 @@ body {
 .watchlist {
     display: flex;
     width: 100%;
-    // max-width: 400px;
     max-height: 350px;
     border: 1px solid black;
     border-radius: 6px;
@@ -274,3 +272,70 @@ body {
     }
 }
 
+@media screen and (max-width: 425px) {
+    .headerContainer {
+        font-size: 12px;
+        margin-bottom: 2rem;
+    }
+
+    .profileBarContainer {
+        margin-bottom: 2rem;
+    }
+
+    .profileBarInner {
+        flex-wrap: nowrap;
+        flex-direction: column;
+        padding: 0;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .userOptions {
+        justify-content: space-around;
+        gap: 0;
+    }
+
+    .editContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+        margin: 0;
+        border: none;
+        border-radius: 0;
+        border-top: 1px solid black;
+        padding-top: 2rem;
+    }
+
+    .watchlist {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    .watchlistContainer {
+        width: 100%;
+        margin: 0;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .watchlistHeader {
+        width: 30%;
+        padding-right: 0.5rem;
+        justify-content: space-around;
+        padding-left: .5rem;
+
+        .userInfo {
+            display: flex;
+            gap: 1rem;
+            margin: 0;
+            padding-bottom: 1rem;
+        }
+    }
+
+    .watchlistContent {
+        padding: 0.5rem;
+    }
+}

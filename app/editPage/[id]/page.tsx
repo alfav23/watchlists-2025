@@ -93,7 +93,7 @@ export default function EditPage() {
   
     <div className={styles.mainContent}>
       <div className={styles.headerContainer}>
-        <h1>Edit Watchlist</h1>
+        <h1>Edit List</h1>
       </div>
       <div className={styles.profileBarContainer}>
         <div className={styles.profileBarInner}>
@@ -121,13 +121,7 @@ export default function EditPage() {
           <div className={styles.userOptions}>
             <Link href='/'>Feed</Link>
               / 
-            <Link href="/my-reviews">My Reviews</Link>
-              / 
-            <Link href="/profile-settings">Profile Settings</Link>
-              / 
               <a onClick={() => {}} href="/createWatchlist">Create New Watchlist</a>
-                        / 
-              <a onClick={() => {}} href="review-form">Write a Review</a>
            </div>
          </div>
       <form onSubmit={handleSave} className={styles.editForm}>

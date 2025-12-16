@@ -21,6 +21,19 @@ const WatchlistForm = () => {
     const [ title, setTitle ] = useState<string>("");
     const [ isPrivate, setIsPrivate ] = useState<boolean>(true);
 
+    const handleCancel = () => {
+        router.back;
+    }
+
+    const clearForm = () => {
+        setGenre("");
+        setItem("");
+        setItems([]);
+        setTags([]);
+        setTitle("");
+        setIsPrivate(true);
+    }
+
     const handleAddShow = () => {
         setItems(prev => [...prev, item.trim()]);
         setItem("");
@@ -77,6 +90,7 @@ const WatchlistForm = () => {
     return (
         <div className={styles.watchlistFormContainer}>
             <form className={styles.watchlistForm} onSubmit={pushList}>
+                <label>Name your list and determine its genre!</label>
                 <input 
                     type="text" 
                     placeholder="Title"
@@ -137,8 +151,10 @@ const WatchlistForm = () => {
                         </button>
                     </div>
                 </div>
-                <p>Public lists will appear on the public feed.</p>
-                <p>{`Private lists will only be visible to you${user ? `, ${user.displayName || user.email?.replaceAll(" ", "")}` : '' }!`}</p>
+                <div className={styles.privateDisclaimer}>
+                    <p>Public lists will appear on the public feed.</p>
+                    <p>{`Private lists will only be visible to you${user ? `, ${user.displayName?.replaceAll(" ", "") || user.email?.replaceAll(" ", "")}` : '' }!`}</p>
+                </div>
                 <select 
                     name="status-setting" 
                     id="status-setting"
@@ -148,7 +164,13 @@ const WatchlistForm = () => {
                     <option value="private">Private</option>
                     <option value="public">Public</option>
                 </select>
-                <button className={styles.publishWatchlistButton} type="submit">Publish Watchlist</button>
+                <div className={styles.buttons}>
+                    <button className={styles.publishWatchlistButton} type="submit">Publish Watchlist</button>
+
+                    <button type="reset" className={styles.clearButton} onClick={clearForm}>Restart</button>
+
+                    <button type="button" className={styles.cancelButton} onClick={handleCancel}>Cancel</button>
+                </div>
             </form>
         </div>
     )
