@@ -23,10 +23,14 @@
 }
 
 .searchIcon {
+  background: none;
+  border: none;
+  padding: 0;
   position: absolute;
   right: .5rem;
-  bottom: .32rem;
+  bottom: .2rem;
   font-size: small;
+  cursor: pointer;
 }
 
 .userOptions {
@@ -37,8 +41,11 @@
     font-size: 10px;
     margin-top: 10px;
 
-    a {
-        text-decoration: none;
+    button {
+        background: none;
+        border: none;
+        font-family: "PressStart2P", sans-serif;
+        font-size: 10px;
         color: plum;
 
         &:hover {

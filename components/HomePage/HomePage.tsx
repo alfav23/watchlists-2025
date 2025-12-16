@@ -4,8 +4,11 @@ import Feed from "../Feed";
 import Discover from '../Discover';
 import Header from '../Header';
 import ProfileBar from "../ProfileBar";
+import { useState } from "react";
 
 export const HomePage = () => {
+    const [ listFilter, setListFilter ] = useState<string>("random");
+
     return (
         <div className={styles.container}>
             <div className={styles.header}>
@@ -14,10 +17,11 @@ export const HomePage = () => {
             <div className={styles.mainContent}>
                 <div className={styles.leftSideBar}>
                     <ProfileBar />
-                    <Discover />
+                    <Discover setSearchParam={setListFilter} searchParam={listFilter} />
                 </div>
+                
                 <div className={styles.feed}>
-                    <Feed />
+                    <Feed searchParam={listFilter}/>
                 </div>
                 
             </div>

@@ -3,7 +3,7 @@ import Watchlist  from '../Watchlist';
 import { MdAddBox } from "react-icons/md";
 import Link from 'next/link';
 
-export const Feed = () => {
+export const Feed = ({searchParam}: any) => {
     return (
         <div className={styles.feedContainer}>
             <div className={styles.feedTitle}>
@@ -26,6 +26,7 @@ export const Feed = () => {
                             saves={0}
                             likes={0}
                             comments={0}
+                            filter={searchParam}
                         />
                     </li>
                 </ul>

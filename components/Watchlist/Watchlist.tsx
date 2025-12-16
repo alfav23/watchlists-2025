@@ -5,7 +5,7 @@ import Image from "next/image";
 import { CiStar, CiHeart } from 'react-icons/ci';
 import { TfiComment } from "react-icons/tfi";
 import { db } from "../../lib/firebaseConfig";
-import { doc, updateDoc, collection, query, getDocs, where, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { doc, updateDoc, collection, query, getDocs, where, arrayUnion, arrayRemove, or } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { IoMdHeart } from "react-icons/io";
 import { FaStar } from "react-icons/fa6";
@@ -25,6 +25,7 @@ interface WatchlistProps {
     saves: number;
     likes: number;
     comments: number;
+    filter: string;
 }
 
 export default function Watchlist({
@@ -34,7 +35,8 @@ export default function Watchlist({
     tags,
     tag,
     items,
-    item
+    item,
+    filter
 }: WatchlistProps) {
     const router = useRouter();
     const [ likedWatchlists, setLikedWatchlists ] = useState<{[key: string]: boolean}>({});
@@ -173,7 +175,15 @@ export default function Watchlist({
     const fetchPublicWatchlists = async () => {
         const querySnapshot = await getDocs(q);
         const lists = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setPublicWatchlists(lists);
+        if (!filter) {
+            setPublicWatchlists(lists); 
+        } else {
+            const searchQ = query(watchlists, or(where("tags", "array-contains", filter), where("genre", "==", filter)));
+            const querySnapshot = await getDocs(searchQ);
+            const filteredLists = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setPublicWatchlists(filteredLists);
+        }
+        
 
         // Set per-watchlist liked/saved state for current user
         if (user) {
@@ -192,7 +202,7 @@ export default function Watchlist({
     useEffect(() => {
         // refetch when user changes (or becomes available)
         fetchPublicWatchlists();
-    }, [user]);
+    }, [user, filter]);
 
     return (
         <div className={styles.feed}>
