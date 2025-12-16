@@ -69,3 +69,16 @@
 
   
 }
+
+@media screen and (max-width: 768px) {
+  .feedContainer {
+    max-width: 600px;
+    align-items: center;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  
+}

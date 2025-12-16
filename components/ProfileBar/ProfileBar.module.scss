@@ -64,8 +64,7 @@
 
     .userInfo {
         flex-direction: column;
-        width: 30%;
-        word-wrap: break-word;
+        width: 50%;
         align-items: center;
         justify-content: center;
         padding: 0;
@@ -82,5 +81,27 @@
     .userOptions {
         padding: 20px;
         justify-content: space-between;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .profileBarContainer {
+        padding: 5px;
+        
+    }
+
+    .userInfo {
+       flex-direction: column;
+       align-items: center;
+       justify-content: center;
+
+       div {
+        text-align: center;
+       }
+    }
+
+    .userOptions {
+        padding: 20px;
+        text-align: center;
     }
 }
