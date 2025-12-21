@@ -7,7 +7,7 @@ import ProfileBar from "../ProfileBar";
 import { useState } from "react";
 
 export const HomePage = () => {
-    const [ listFilter, setListFilter ] = useState<string>("random");
+    const [ listFilter, setListFilter ] = useState<string>("");
 
     return (
         <div className={styles.container}>
