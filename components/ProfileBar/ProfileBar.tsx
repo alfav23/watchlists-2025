@@ -16,13 +16,13 @@ export const ProfileBar = () => {
         return null; // or a loading placeholder
     }
     
-    const goToProfile = () => {
-        if (!user || !user.displayName) return;
+    // const goToProfile = () => {
+    //     if (!user || !user.displayName) return;
                 
-        else {
-            router.push(`/profile/${user.uid}`)
-        }
-    }
+    //     else {
+    //         router.push(`/profile/${user.uid}`)
+    //     }
+    // }
 
     const logOut = async () => {
         const { getAuth } = await import('firebase/auth');
@@ -43,7 +43,7 @@ export const ProfileBar = () => {
     return (
         <div>
             <div className={styles.profileBarContainer}>
-                <div onClick={goToProfile} className={styles.userInfo}>
+                <div className={styles.userInfo}>
                     <Image 
                         src={'/images/cinnamoroll.png'}
                         width={50}

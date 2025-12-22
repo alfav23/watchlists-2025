@@ -4,19 +4,29 @@ import { FaSearch } from "react-icons/fa";
 
 export const Discover = ({setSearchParam, searchParam}: any) => {
 
+    const clearFilter = () => {
+        setSearchParam("");
+    }
+
     return (
         <div className={styles.discoverContainer}>
             <div className={styles.discoverTitle}>Discover</div>
             <div className={styles.searchContainer}>
-                <input className={styles.search} type="text" placeholder="Search" value={searchParam}/>
-                <button className={styles.searchIcon}>
-                    <FaSearch />  
-                </button>
+                <input className={styles.search} type="text" placeholder="Search" value={searchParam} onChange={(e) => setSearchParam(e.target.value)}/>
+                {searchParam ? (
+                   <button onClick={clearFilter} className={styles.clearFilter}>
+                        x
+                    </button> 
+                ) : (
+                    <button className={styles.searchIcon}>
+                        <FaSearch />  
+                    </button> )}
+                    
             </div>
             <div className={styles.userOptions}>
                 {/* <button>Recommended for you...</button> */}
                 <button onClick={() => setSearchParam("anime")}>Anime</button>
-                <button onClick={() => setSearchParam("trending")}>Trending</button>
+                {/* <button onClick={() => setSearchParam("trending")}>Trending</button> */}
                 <button onClick={() => setSearchParam("true crime")}>True Crime</button>
                 <button onClick={() => setSearchParam("holiday")}>Holiday</button>
                 <button onClick={() => setSearchParam("action")}>Action</button>
