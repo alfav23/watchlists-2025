@@ -56,7 +56,7 @@ const WatchlistForm = () => {
         const newWatchlistData = {
             creatorID: user ? user.displayName : null,
             title: title,
-            genre: genre,
+            genre: genre.toLowerCase(),
             items: items,
             tags: tags,
             private: isPrivate,
@@ -64,7 +64,7 @@ const WatchlistForm = () => {
             saves: 0,
             comments: {
                 commentCount: 0,
-                comments: []
+                comments: {}
             },
             profilePic: user?.photoURL ?? null,
             favorited: false,
@@ -134,7 +134,7 @@ const WatchlistForm = () => {
                     <p>Add some tags so people can find your list!</p>
                     <ul className={styles.tagsList}>
                         {tags.map((tag) => (
-                            <li key={Math.random()} className={styles.tag}>{tag}
+                            <li key={Math.random()} className={styles.tag}>{tag.toLowerCase()}
                             </li>
                         ))}
                     </ul>
@@ -143,7 +143,7 @@ const WatchlistForm = () => {
                             value={tag} 
                             type="text"
                             placeholder="Enter a tag"
-                            onChange={(e) => setTag(e.target.value)}
+                            onChange={(e) => setTag(e.target.value.toLowerCase())}
                         />
                         <button 
                             type="button"

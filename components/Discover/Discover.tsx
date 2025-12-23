@@ -12,7 +12,7 @@ export const Discover = ({setSearchParam, searchParam}: any) => {
         <div className={styles.discoverContainer}>
             <div className={styles.discoverTitle}>Discover</div>
             <div className={styles.searchContainer}>
-                <input className={styles.search} type="text" placeholder="Search" value={searchParam} onChange={(e) => setSearchParam(e.target.value)}/>
+                <input className={styles.search} type="text" placeholder="Search" value={searchParam} onChange={(e) => setSearchParam(e.target.value.toLowerCase())}/>
                 {searchParam ? (
                    <button onClick={clearFilter} className={styles.clearFilter}>
                         x
