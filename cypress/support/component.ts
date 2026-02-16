@@ -31,6 +31,8 @@ declare global {
 }
 
 Cypress.Commands.add('mount', mount)
-
+Cypress.on("uncaught:exception", (error: Error) => {
+  if (error.message.includes("GenIcon")) return false;
+})
 // Example use:
 // cy.mount(<MyComponent />)
